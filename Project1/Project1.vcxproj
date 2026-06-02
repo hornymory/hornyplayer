@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{6550438d-dfc5-4e26-9708-f8df073bc84a}</ProjectGuid>
+    <RootNamespace>Project1</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)thirdparty\imgui\backends;$(ProjectDir)thirdparty\imgui;$(ProjectDir)thirdparty\stb;$(ProjectDir)thirdparty\freetype\include;$(ProjectDir)thirdparty\ffmpeg\include;$(ProjectDir)thirdparty\portaudio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)thirdparty\imgui\backends;$(ProjectDir)thirdparty\imgui;$(ProjectDir)thirdparty\stb;$(ProjectDir)thirdparty\freetype\include;$(ProjectDir)thirdparty\ffmpeg\include;$(ProjectDir)thirdparty\portaudio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)thirdparty\imgui\backends;$(ProjectDir)thirdparty\imgui;$(ProjectDir)thirdparty\stb;$(ProjectDir)thirdparty\freetype\include;$(ProjectDir)thirdparty\ffmpeg\include;$(ProjectDir)thirdparty\portaudio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;portaudio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <AdditionalLibraryDirectories>$(ProjectDir)thirdparty\freetype\win64;$(ProjectDir)thirdparty\portaudio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)thirdparty\imgui\backends;$(ProjectDir)thirdparty\imgui;$(ProjectDir)thirdparty\stb;$(ProjectDir)thirdparty\freetype\include;$(ProjectDir)thirdparty\ffmpeg\include;$(ProjectDir)thirdparty\portaudio\inc;$(ProjectDir)thirdparty\dxsdk\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;portaudio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <AdditionalLibraryDirectories>$(ProjectDir)thirdparty\freetype\win64;$(ProjectDir)thirdparty\portaudio\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="framework\gui.cpp" />
+    <ClCompile Include="framework\helpers\blur.cpp" />
+    <ClCompile Include="framework\helpers\config.cpp" />
+    <ClCompile Include="framework\helpers\draw.cpp" />
+    <ClCompile Include="framework\helpers\fonts.cpp" />
+    <ClCompile Include="framework\helpers\node.cpp" />
+    <ClCompile Include="framework\helpers\player_stub.cpp" />
+    <ClCompile Include="framework\helpers\songs.cpp" />
+    <ClCompile Include="framework\widgets\button.cpp" />
+    <ClCompile Include="framework\widgets\cards.cpp" />
+    <ClCompile Include="framework\widgets\checkbox.cpp" />
+    <ClCompile Include="framework\widgets\child.cpp" />
+    <ClCompile Include="framework\widgets\helpers.cpp" />
+    <ClCompile Include="framework\widgets\notify.cpp" />
+    <ClCompile Include="framework\widgets\pages.cpp" />
+    <ClCompile Include="framework\widgets\textfield.cpp" />
+    <ClCompile Include="framework\widgets\window.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="thirdparty\imgui\backends\imgui_impl_dx11.cpp" />
+    <ClCompile Include="thirdparty\imgui\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui_draw.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui_freetype.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui_tables.cpp" />
+    <ClCompile Include="thirdparty\imgui\imgui_widgets.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework\data\fonts.h" />
+    <ClInclude Include="framework\data\images.h" />
+    <ClInclude Include="framework\headers\blur.h" />
+    <ClInclude Include="framework\headers\config.h" />
+    <ClInclude Include="framework\headers\draw.h" />
+    <ClInclude Include="framework\headers\dr_flac.h" />
+    <ClInclude Include="framework\headers\flags.h" />
+    <ClInclude Include="framework\headers\fonts.h" />
+    <ClInclude Include="framework\headers\functions.h" />
+    <ClInclude Include="framework\headers\includes.h" />
+    <ClInclude Include="framework\headers\node.h" />
+    <ClInclude Include="framework\headers\songs.h" />
+    <ClInclude Include="framework\headers\widgets.h" />
+    <ClInclude Include="framework\settings\colors.h" />
+    <ClInclude Include="framework\settings\elements.h" />
+    <ClInclude Include="framework\settings\variables.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\audiodefs.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\comdecl.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D2D1.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D2D1Helper.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D2DBaseTypes.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D2Derr.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3D10.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3D10effect.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3d10misc.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3d10sdklayers.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3D10shader.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3D10_1.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3D10_1shader.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3D11.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3D11SDKLayers.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3D11Shader.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3d9.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3d9caps.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3d9types.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3Dcommon.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3Dcompiler.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3DCSX.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3DX10.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx10async.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3DX10core.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3DX10math.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3DX10mesh.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3DX10tex.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3DX11.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3DX11async.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3DX11core.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\D3DX11tex.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx9.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx9anim.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx9core.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx9effect.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx9math.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx9mesh.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx9shader.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx9shape.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx9tex.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\d3dx9xof.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\Dcommon.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\detours.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\dinput.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\dinputd.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\dsconf.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\dsetup.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\dsound.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\DWrite.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\dxdiag.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\DxErr.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\dxfile.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\DXGI.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\DXGIFormat.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\DXGIType.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\dxsdkver.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\gameux.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\PIXPlugin.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\rmxfguid.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\rmxftmpl.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\rpcsal.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\X3DAudio.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\xact3.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\xact3d3.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\xact3wb.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\XAPO.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\XAPOBase.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\XAPOFX.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\XAudio2.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\XAudio2fx.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\XDSP.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\XInput.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\xma2defs.h" />
+    <ClInclude Include="thirdparty\dxsdk\Include\xnamath.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\ac3_parser.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\adts_parser.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\avcodec.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\avdct.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\bsf.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\codec.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\codec_desc.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\codec_id.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\codec_par.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\d3d11va.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\defs.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\dirac.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\dv_profile.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\dxva2.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\jni.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\mediacodec.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\packet.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\qsv.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\vdpau.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\version.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\version_major.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\videotoolbox.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavcodec\vorbis_parser.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavdevice\avdevice.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavdevice\version.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavdevice\version_major.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavfilter\avfilter.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavfilter\buffersink.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavfilter\buffersrc.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavfilter\version.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavfilter\version_major.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavformat\avformat.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavformat\avio.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavformat\version.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavformat\version_major.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\adler32.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\aes.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\aes_ctr.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\ambient_viewing_environment.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\attributes.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\audio_fifo.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\avassert.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\avconfig.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\avstring.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\avutil.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\base64.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\blowfish.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\bprint.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\bswap.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\buffer.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\camellia.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\cast5.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\channel_layout.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\common.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\container_fifo.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\cpu.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\crc.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\csp.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\des.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\detection_bbox.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\dict.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\display.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\dovi_meta.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\downmix_info.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\encryption_info.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\error.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\eval.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\executor.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\ffversion.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\fifo.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\file.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\film_grain_params.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\frame.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hash.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hdr_dynamic_metadata.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hdr_dynamic_vivid_metadata.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hmac.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_amf.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_cuda.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_d3d11va.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_d3d12va.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_drm.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_dxva2.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_mediacodec.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_opencl.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_qsv.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_vaapi.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_vdpau.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_videotoolbox.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\hwcontext_vulkan.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\iamf.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\imgutils.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\intfloat.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\intreadwrite.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\lfg.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\log.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\lzo.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\macros.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\mastering_display_metadata.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\mathematics.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\md5.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\mem.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\motion_vector.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\murmur3.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\opt.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\parseutils.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\pixdesc.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\pixelutils.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\pixfmt.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\random_seed.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\rational.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\rc4.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\refstruct.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\replaygain.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\ripemd.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\samplefmt.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\sha.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\sha512.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\spherical.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\stereo3d.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\tea.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\threadmessage.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\time.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\timecode.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\timestamp.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\tree.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\twofish.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\tx.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\uuid.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\version.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\video_enc_params.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\video_hint.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libavutil\xtea.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libswresample\swresample.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libswresample\version.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libswresample\version_major.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libswscale\swscale.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libswscale\version.h" />
+    <ClInclude Include="thirdparty\ffmpeg\include\libswscale\version_major.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\config\ftconfig.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\config\ftheader.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\config\ftmodule.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\config\ftoption.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\config\ftstdlib.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\config\integer-types.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\config\mac-support.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\config\public-macros.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\freetype.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftadvanc.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftbbox.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftbdf.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftbitmap.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftbzip2.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftcache.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftchapters.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftcid.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftcolor.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftdriver.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\fterrdef.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\fterrors.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftfntfmt.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftgasp.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftglyph.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftgxval.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftgzip.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftimage.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftincrem.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftlcdfil.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftlist.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftlogging.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftlzw.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftmac.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftmm.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftmodapi.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftmoderr.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftotval.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftoutln.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftparams.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftpfr.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftrender.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftsizes.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftsnames.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftstroke.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftsynth.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftsystem.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\fttrigon.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\fttypes.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ftwinfnt.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\otsvg.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\t1tables.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\ttnameid.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\tttables.h" />
+    <ClInclude Include="thirdparty\freetype\include\freetype\tttags.h" />
+    <ClInclude Include="thirdparty\freetype\include\ft2build.h" />
+    <ClInclude Include="thirdparty\imgui\backends\imgui_impl_dx10.h" />
+    <ClInclude Include="thirdparty\imgui\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="thirdparty\imgui\backends\imgui_impl_dx12.h" />
+    <ClInclude Include="thirdparty\imgui\backends\imgui_impl_dx9.h" />
+    <ClInclude Include="thirdparty\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="thirdparty\imgui\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="thirdparty\imgui\backends\imgui_impl_sdl2.h" />
+    <ClInclude Include="thirdparty\imgui\backends\imgui_impl_sdlrenderer2.h" />
+    <ClInclude Include="thirdparty\imgui\backends\imgui_impl_win32.h" />
+    <ClInclude Include="thirdparty\imgui\imconfig.h" />
+    <ClInclude Include="thirdparty\imgui\imgui.h" />
+    <ClInclude Include="thirdparty\imgui\imgui_freetype.h" />
+    <ClInclude Include="thirdparty\imgui\imgui_internal.h" />
+    <ClInclude Include="thirdparty\imgui\imstb_rectpack.h" />
+    <ClInclude Include="thirdparty\imgui\imstb_textedit.h" />
+    <ClInclude Include="thirdparty\imgui\imstb_truetype.h" />
+    <ClInclude Include="thirdparty\portaudio\inc\pa_asio.h" />
+    <ClInclude Include="thirdparty\portaudio\inc\pa_jack.h" />
+    <ClInclude Include="thirdparty\portaudio\inc\pa_linux_alsa.h" />
+    <ClInclude Include="thirdparty\portaudio\inc\pa_mac_core.h" />
+    <ClInclude Include="thirdparty\portaudio\inc\pa_win_ds.h" />
+    <ClInclude Include="thirdparty\portaudio\inc\pa_win_wasapi.h" />
+    <ClInclude Include="thirdparty\portaudio\inc\pa_win_waveformat.h" />
+    <ClInclude Include="thirdparty\portaudio\inc\pa_win_wdmks.h" />
+    <ClInclude Include="thirdparty\portaudio\inc\pa_win_wmme.h" />
+    <ClInclude Include="thirdparty\portaudio\inc\portaudio.h" />
+    <ClInclude Include="thirdparty\stb\stb_image.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="thirdparty\freetype\win64\freetype.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="imgui.ini" />
+    <None Include="thirdparty\dxsdk\Include\D3DX10math.inl" />
+    <None Include="thirdparty\dxsdk\Include\d3dx9math.inl" />
+    <None Include="thirdparty\dxsdk\Include\D3DX_DXGIFormatConvert.inl" />
+    <None Include="thirdparty\dxsdk\Include\xnamathconvert.inl" />
+    <None Include="thirdparty\dxsdk\Include\xnamathmatrix.inl" />
+    <None Include="thirdparty\dxsdk\Include\xnamathmisc.inl" />
+    <None Include="thirdparty\dxsdk\Include\xnamathvector.inl" />
+    <None Include="thirdparty\ffmpeg\lib\avcodec-62.def" />
+    <None Include="thirdparty\ffmpeg\lib\avdevice-62.def" />
+    <None Include="thirdparty\ffmpeg\lib\avfilter-11.def" />
+    <None Include="thirdparty\ffmpeg\lib\avformat-62.def" />
+    <None Include="thirdparty\ffmpeg\lib\avutil-60.def" />
+    <None Include="thirdparty\ffmpeg\lib\swresample-6.def" />
+    <None Include="thirdparty\ffmpeg\lib\swscale-9.def" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
