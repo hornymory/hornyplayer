@@ -16,7 +16,7 @@ void c_gui::render()
 		gui->drag_window();
 		gui->set_style();
 		gui->draw_decorations();
-		//gui->draw_node();
+		gui->draw_node();
 		if (var->gui.resize_fade > 0.01f)
 		{
 			draw->rect_filled(
@@ -52,7 +52,7 @@ void c_gui::render()
 			gui->push_var(style_var_alpha, var->gui.stage_alpha);
 			if (var->gui.active_stage > 0)
 			{
-				widgets->top_bar("https://google.com","ахуенно", "17.03.2026");
+				widgets->top_bar("https://google.com","something", "17.03.2026");
 				gui->sameline();
 				widgets->settings_button();
 			}

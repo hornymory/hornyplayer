@@ -67,3 +67,48 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build directories
+x64/
+x86/
+Debug/
+Release/
+build/
+bin/
+obj/
+
+# CMake (если используешь)
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+compile_commands.json
+
+# Visual Studio generated files
+*.VC.db
+*.vs
+*.VC.opendb
+*.ilk
+*.pdb
+*.ipdb
+*.iobj
+*.obj
+*.exe
+*.dll
+*.lib
+*.exp
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.cache
+
+# ImGui settings
+imgui.ini
