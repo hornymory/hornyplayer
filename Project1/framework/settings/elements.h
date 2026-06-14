@@ -150,7 +150,7 @@ public:
 	struct
 	{
 		ImVec2 size{ 90,50 };
-		float blur{ 5 };
+		float blur{ 2 };
 		ImVec2 padding{ 12, 12 };
 		std::vector<std::string> contacts_name{ "Discord","Telegram","Website" };
 		std::vector<std::string> contacts_urls{ "Discord.com","Telegram.com","Website.com" };

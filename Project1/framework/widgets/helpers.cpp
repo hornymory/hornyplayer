@@ -1,6 +1,7 @@
 #include "../headers/functions.h"
 #include "../headers/widgets.h"
 #include "../headers/node.h"
+#include"../headers/emoj.h"
 
 void c_gui::push_color(style_col idx, ImU32 col)
 {
@@ -23,22 +24,51 @@ void c_gui::pop_color(int count)
 }
 void c_gui::draw_node() 
 {
+    //ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    //ImVec2 win_pos = ImGui::GetWindowPos();
+    //ImVec2 win_size = ImGui::GetWindowSize();
+    //ImVec2 win_end = ImVec2(win_pos.x + win_size.x, win_pos.y + win_size.y);
+    ////draw_list->AddRectFilledMultiColor(
+    ////    win_pos, win_end,
+    ////    ImColor(5, 5, 5, 255),    // 050505
+    ////    ImColor(5, 5, 5, 255),
+    ////    ImColor(21, 21, 21, 255), // 151515
+    ////    ImColor(21, 21, 21, 255)
+    ////);
+    //draw_nodes_background(draw_list, var->winapi.device_dx11,var->winapi.device_context);
+
+    //draw_background_blur(draw_list, var->winapi.device_dx11, var->winapi.device_context,var->window.rounding,6);
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    ImVec2 win_pos = ImGui::GetWindowPos();
-    ImVec2 win_size = ImGui::GetWindowSize();
-    ImVec2 win_end = ImVec2(win_pos.x + win_size.x, win_pos.y + win_size.y);
-    //draw_list->AddRectFilledMultiColor(
-    //    win_pos, win_end,
-    //    ImColor(5, 5, 5, 255),    // 050505
-    //    ImColor(5, 5, 5, 255),
-    //    ImColor(21, 21, 21, 255), // 151515
-    //    ImColor(21, 21, 21, 255)
-    //);
-    draw_nodes_background(draw_list, var->winapi.device_dx11,var->winapi.device_context);
 
-    draw_background_blur(draw_list, var->winapi.device_dx11, var->winapi.device_context,var->window.rounding);
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
 
-    draw_list->AddRectFilled(win_pos, win_pos + win_size, ImColor(8, 8, 10, 200),var->window.rounding);
+    ImRect area(
+        window->Pos,
+        ImVec2(
+            window->Pos.x + window->Size.x,
+            window->Pos.y + window->Size.y
+        )
+    );
+
+    static std::vector<std::string> emoj =
+    {
+        "^^",
+        ":D",
+        "0_0",
+        "^-^",
+        "*~*",
+        "àûô"
+    };
+
+    draw_text_snow(
+        draw_list,
+        area,
+        emoj,
+        IM_COL32(255, 0, 0, 180),
+        30,
+        (float)ImGui::GetTime()
+    );
+    draw_list->AddRectFilled(window->Pos, window->Pos + window->Size, ImColor(8, 8, 10, 200),var->window.rounding);
 
 
 }

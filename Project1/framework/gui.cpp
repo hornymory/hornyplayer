@@ -1,6 +1,5 @@
 ﻿#include "headers/includes.h"
 #include "headers/widgets.h"
-
 void c_gui::render()
 {
 	gui->initialize();
@@ -17,6 +16,7 @@ void c_gui::render()
 		gui->set_style();
 		gui->draw_decorations();
 		gui->draw_node();
+
 		if (var->gui.resize_fade > 0.01f)
 		{
 			draw->rect_filled(
@@ -49,14 +49,14 @@ void c_gui::render()
 		{
 
 
-			gui->push_var(style_var_alpha, var->gui.stage_alpha);
-			if (var->gui.active_stage > 0)
-			{
-				widgets->top_bar("https://google.com","something", "17.03.2026");
-				gui->sameline();
-				widgets->settings_button();
-			}
-			gui->pop_var();
+			//gui->push_var(style_var_alpha, var->gui.stage_alpha);
+			//if (var->gui.active_stage > 0)
+			//{
+			//	widgets->top_bar("https://google.com","something", "17.03.2026");
+			//	gui->sameline();
+			//	widgets->settings_button();
+			//}
+			//gui->pop_var();
 			gui->push_var(style_var_alpha, var->gui.content_alpha * var->gui.stage_alpha);
 			if (var->gui.active_section == 1)
 			{

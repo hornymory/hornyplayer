@@ -76,9 +76,9 @@ void c_widgets::top_bar(std::string_view url,std::string_view text, std::string_
 
     const ImRect total(pos, pos + ImVec2(gui->content_max().x - SCALE(elements->widgets.spacing.x + elements->window.padding.x + elements->top_bar.height), SCALE(elements->top_bar.height)));
     const ImRect icon_zone(total.Min, total.Min + SCALE(elements->top_bar.padding * 2 + elements->top_bar.icon_size));
-    window->DrawList->PushClipRect(total.Min, total.Max, true);
-    draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context,SCALE(elements->widgets.rounding), elements->top_bar.blur);
-    window->DrawList->PopClipRect();
+    //window->DrawList->PushClipRect(total.Min, total.Max, true);
+    //draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context,SCALE(elements->widgets.rounding), elements->top_bar.blur);
+    //window->DrawList->PopClipRect();
     ItemSize(total, style.FramePadding.y);
     if (!ItemAdd(total, id))
         return;
@@ -198,7 +198,7 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
     const ImVec2 pos = window->DC.CursorPos;
 
     float card_width =
-        (window->WorkRect.Max.x - window->WorkRect.Min.x)
+        (window->WorkRect.Max.x / 1.5 - window->WorkRect.Min.x)
         - SCALE(elements->widgets.spacing.x);
 
     const ImRect total(
@@ -266,7 +266,7 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
         total.Min,
         total.Max,
         draw->get_clr(clr->main.text, state->alpha[2]),
-        SCALE(elements->widgets.rounding)
+        SCALE(0)
     );
 
     draw->rect(
@@ -274,7 +274,7 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
         total.Min,
         total.Max,
         draw->get_clr(clr->main.text, 0.04f),
-        SCALE(elements->widgets.rounding)
+        SCALE(0)
     );
 
     // Картинка песни
@@ -298,7 +298,7 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
             img_zone.Min,
             img_zone.Max,
             draw->get_clr(clr->main.text, 0.08f),
-            SCALE(elements->game_card.img_rounding)
+            SCALE(0)
         );
 
         draw->text_clipped(
@@ -319,7 +319,7 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
         img_zone.Min,
         img_zone.Max,
         draw->get_clr(clr->main.text, 0.12f),
-        SCALE(elements->game_card.img_rounding)
+        SCALE(0)
     );
 
     float text_start_x = img_zone.Max.x + SCALE(8.f);

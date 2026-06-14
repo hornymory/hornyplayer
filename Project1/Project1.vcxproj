@@ -109,6 +109,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)thirdparty\imgui\backends;$(ProjectDir)thirdparty\imgui;$(ProjectDir)thirdparty\stb;$(ProjectDir)thirdparty\freetype\include;$(ProjectDir)thirdparty\ffmpeg\include;$(ProjectDir)thirdparty\portaudio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -128,6 +129,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(ProjectDir)thirdparty\imgui\backends;$(ProjectDir)thirdparty\imgui;$(ProjectDir)thirdparty\stb;$(ProjectDir)thirdparty\freetype\include;$(ProjectDir)thirdparty\ffmpeg\include;$(ProjectDir)thirdparty\portaudio\inc;$(ProjectDir)thirdparty\dxsdk\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,9 +141,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="framework\gui.cpp" />
+    <ClCompile Include="framework\headers\emoj.h" />
     <ClCompile Include="framework\helpers\blur.cpp" />
     <ClCompile Include="framework\helpers\config.cpp" />
     <ClCompile Include="framework\helpers\draw.cpp" />
+    <ClCompile Include="framework\helpers\emoj.cpp" />
     <ClCompile Include="framework\helpers\fonts.cpp" />
     <ClCompile Include="framework\helpers\node.cpp" />
     <ClCompile Include="framework\helpers\player_stub.cpp" />
