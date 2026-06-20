@@ -14,6 +14,8 @@ struct Song
 
 	bool texture_created{ false };
 	bool play{ false };
+	float current_time{ 0.f };
+	float full_time{ 0.f };
 };
 
 

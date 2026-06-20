@@ -49,7 +49,10 @@ public:
     void widgets_end_child();
 
     void selection_buttons(std::string_view widgets_id, std::string_view name, std::string_view p1, std::string_view p2, int& variable);
+
     void background_songs();
+
+    
 
 };
 

@@ -53,11 +53,11 @@ void c_widgets::version_card(std::string_view widgets_id, std::string_view name,
 
 };
 
-void c_widgets::top_bar(std::string_view url,std::string_view text, std::string_view date)
+void c_widgets::top_bar(std::string_view url, std::string_view text, std::string_view date)
 {
     struct top_bar_state
     {
-        float alpha{ 0.f };
+        float alpha[3]{ 1.f, 0.f, 0.03f };
         bool clicked{ false };
         ImVec4 icon{ clr->main.accent };
     };
@@ -74,39 +74,77 @@ void c_widgets::top_bar(std::string_view url,std::string_view text, std::string_
 
     ImVec2 pos = window->DC.CursorPos;
 
-    const ImRect total(pos, pos + ImVec2(gui->content_max().x - SCALE(elements->widgets.spacing.x + elements->window.padding.x + elements->top_bar.height), SCALE(elements->top_bar.height)));
-    const ImRect icon_zone(total.Min, total.Min + SCALE(elements->top_bar.padding * 2 + elements->top_bar.icon_size));
-    //window->DrawList->PushClipRect(total.Min, total.Max, true);
-    //draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context,SCALE(elements->widgets.rounding), elements->top_bar.blur);
-    //window->DrawList->PopClipRect();
+    const ImRect total(pos, pos + ImVec2(window->WorkRect.Max.x - window->WorkRect.Min.x, SCALE(elements->top_bar.height)));
     ItemSize(total, style.FramePadding.y);
     if (!ItemAdd(total, id))
         return;
+    //ImVec2(window->WorkRect.Max.x - window->WorkRect.Min.x, window->WorkRect.Max.y - window->WorkRect.Min.y
 
-    if (total.Contains(g.IO.MousePos) && g.IO.MouseClicked[0])
+    draw->rect(
+        window->DrawList,
+        total.Min,
+        total.Max,
+        draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f)),
+        0
+    );
+    draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(ImVec4(14.f / 255.f, 14.f / 255.f, 14.f / 255.f, 40.f / 100.f)), 0);
+
+    float line_length = SCALE(20.f);  
+    float line_thick = SCALE(4.f);   
+    auto corner_clr = draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f), 1.0f); 
+
+    window->DrawList->AddLine(total.Min, ImVec2(total.Min.x + line_length, total.Min.y), corner_clr, line_thick);
+    window->DrawList->AddLine(total.Min, ImVec2(total.Min.x, total.Min.y + line_length), corner_clr, line_thick);
+
+    window->DrawList->AddLine(total.Max, ImVec2(total.Max.x - line_length, total.Max.y), corner_clr, line_thick);
+    window->DrawList->AddLine(total.Max, ImVec2(total.Max.x, total.Max.y - line_length), corner_clr, line_thick);
+
+    ImVec2 close_pos(total.Max.x - SCALE(30.f), total.Min.y + (total.GetSize().y / 2.f) - SCALE(9.f));
+    ImVec2 minimize_pos(total.Max.x - SCALE(60.f), total.Min.y + (total.GetSize().y / 2.f) - SCALE(18.f));
+
+    bool close_hovered = ImGui::IsMouseHoveringRect(close_pos, close_pos + ImVec2(SCALE(18.f), SCALE(18.f)));
+    bool minimize_hovered = ImGui::IsMouseHoveringRect(minimize_pos, minimize_pos + ImVec2(SCALE(30.f), SCALE(30.f)));
+    //draw->rect(
+    //    window->DrawList,
+    //    close_pos, close_pos + ImVec2(SCALE(18.f), SCALE(18.f)),
+    //    draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f)),
+    //    0
+    //);
+    draw->text_clipped(
+        window->DrawList,
+        font->get(suisse_intl_semi_bold_data, 18),
+        close_pos,
+        close_pos + ImVec2(SCALE(18.f), SCALE(18.f)),
+        draw->get_clr(clr->main.text, close_hovered ? 1.f : 0.6f),
+        "X",
+        nullptr,
+        nullptr,
+        ImVec2(0.5f, 0.5f)
+    );
+
+    draw->text_clipped(
+        window->DrawList,
+        font->get(suisse_intl_semi_bold_data, 30),
+        minimize_pos,
+        minimize_pos + ImVec2(SCALE(30.f), SCALE(18.f)),
+        draw->get_clr(clr->main.text, minimize_hovered ? 1.f : 0.6f),
+        "-",
+        nullptr,
+        nullptr,
+        ImVec2(0.5f, 0.5f)
+    );
+
+
+    if (close_hovered && g.IO.MouseClicked[0])
     {
-        state->clicked = true;
-        gui->open_url(url.data());
+        PostQuitMessage(0);
     }
-    if (state->alpha <= 0.41)
+    if (minimize_hovered && g.IO.MouseClicked[0])
     {
-        state->clicked = false;
+        ShowWindow(var->winapi.hwnd, SW_MINIMIZE);
     }
 
-    gui->easing(state->alpha, state->clicked ? 0.4f : 1.f, 2.f, static_easing);
-    gui->easing(state->icon, state->clicked ? clr->main.text.Value : clr->main.super.Value, 12.f, dynamic_easing);
-
-    draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(clr->main.text, 0.03f), SCALE(elements->widgets.rounding));
-    draw->rect(window->DrawList, total.Min, total.Max, draw->get_clr(clr->main.text, 0.04), SCALE(elements->widgets.rounding), 0, SCALE(1));
-    draw->text_clipped(window->DrawList, font->get(icons_data, 17), icon_zone.Min, icon_zone.Max, draw->get_clr(state->icon, state->alpha), "A", NULL, NULL, ImVec2(0.5f, 0.5f));
-    
-    draw->circle_filled(window->DrawList, ImVec2(icon_zone.Max.x, total.GetCenter().y), SCALE(1), draw->get_clr(clr->main.text, 0.12), 30);
-    
-    draw->text_clipped(window->DrawList, font->get(icons_data, 12), ImVec2(icon_zone.Max.x + SCALE(elements->top_bar.padding.x), total.Min.y), ImVec2(icon_zone.Max.x + SCALE(elements->top_bar.padding.x + elements->top_bar.icon_2_zone_width), total.Max.y), draw->get_clr(clr->main.super), "B", NULL, NULL, ImVec2(0.5f, 0.5f));
-    draw->text_clipped(window->DrawList, font->get(suisse_intl_medium_data, 16), ImVec2(icon_zone.Max.x + SCALE(elements->top_bar.padding.x + elements->top_bar.icon_2_zone_width + elements->top_bar.texts_spacing), total.Min.y - SCALE(1)), total.Max, draw->get_clr(clr->main.text), text.data(), NULL, NULL, ImVec2(0.f, 0.5f));
-    draw->text_clipped(window->DrawList, font->get(suisse_intl_medium_data, 16), total.Min - SCALE(0, 1), total.Max - SCALE(elements->top_bar.padding.x, 0), draw->get_clr(clr->main.text, 0.48), date.data(), NULL, NULL, ImVec2(1.f, 0.5f));
-    draw->text_clipped(window->DrawList, font->get(icons_data, 12), ImVec2(total.Max.x - SCALE(elements->top_bar.padding.x + elements->top_bar.texts_spacing + elements->top_bar.icon_2_zone_width) - gui->text_size(font->get(suisse_intl_medium_data, 16), date.data()).x, total.Min.y), ImVec2(total.Max.x - SCALE(elements->top_bar.padding.x + elements->top_bar.texts_spacing) - gui->text_size(font->get(suisse_intl_medium_data, 16), date.data()).x, total.Max.y), draw->get_clr(clr->main.text, 0.24), "V", NULL, NULL, ImVec2(0.5f, 0.5f));
-};
+}
 bool c_widgets::progress_row(std::string_view widgets_id, std::string_view name, float procent, float width) 
 {
     struct progress_row_state
@@ -159,21 +197,10 @@ bool c_widgets::progress_row(std::string_view widgets_id, std::string_view name,
 
 
     draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(clr->main.text, 0.12f), SCALE(4.f));
-    //char percent_text[16];
-    //ImFormatString(percent_text, IM_ARRAYSIZE(percent_text), "%.0f%%", state->shown);
-
-    //draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(clr->main.text, 0.02f), SCALE(elements->widgets.rounding));
-    //draw->rect(window->DrawList, total.Min, total.Max, draw->get_clr(clr->main.text, 0.04f), SCALE(elements->widgets.rounding));
-
-    //draw->text_clipped(window->DrawList, font->get(suisse_intl_medium_data, 16), total.Min + SCALE(14.f, 8.f),total.Max, draw->get_clr(clr->main.text), name.data());
-    //draw->text_clipped(window->DrawList, font->get(suisse_intl_medium_data, 14), total.Min, total.Max - SCALE(14.f, 0.f), draw->get_clr(clr->main.text, 0.72f), percent_text, NULL, NULL, ImVec2(1.f, 0.35f));
-
-    //draw->rect_filled(window->DrawList, bar_bg.Min, bar_bg.Max, draw->get_clr(clr->main.text, 0.08f), SCALE(4.f));
-    //draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(clr->main.accent, 1.f), SCALE(4.f));
-    //draw->rect(window->DrawList, bar_bg.Min, bar_bg.Max, draw->get_clr(clr->main.text, 0.12f), SCALE(4.f));
-
-
     return state->shown >= 99.5f;
+
+
+
 
 
 }
@@ -359,13 +386,14 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
 {
     struct song_card_state
     {
-        float alpha[3]{ 1.f, 0.f, 0.03f };
+        float alpha[3]{ 1.f, 0.f, 0.f };
         bool clicked{ false };
         bool hovered{ false };
+        float shown{ 0.f };
 
         float img_alpha{ 0.f };
         std::string last_song_name{};
-        ImFont* author_font;
+        ImFont* author_name_font;
         ImFont* song_name_font;
     };
 
@@ -390,6 +418,19 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
     float center_x = total.Min.x + total.GetSize().x / 2.f - image_size / 2.f;
     float top_y = total.Min.y + SCALE(40.f);
 
+    float progress = (song.current_time / song.full_time) * 100.f;
+    const float p = ImClamp(progress, 0.0f, 100.0f);
+
+
+
+
+
+
+
+
+
+
+
     const ImRect img_zone(
         ImVec2(center_x, top_y),
         ImVec2(center_x + image_size, top_y + image_size)
@@ -409,9 +450,34 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
 
     // поднимаем альфу если есть текстура
     gui->easing(state->img_alpha, song.texture ? 0.8f : 0.f, 6.f, static_easing);
-    
+    gui->easing(state->shown, p, 10.f, static_easing);
+
+
+
+
+
+
+
+
+    // progress
+    float bar_height = SCALE(6.f);
+    float bar_y = img_zone.Max.y + SCALE(90.f);
+
+    const ImRect bar_bg(
+        ImVec2(img_zone.Min.x, bar_y),
+        ImVec2(img_zone.Max.x, bar_y + bar_height)
+    );
+
+    const float bar_w = ImMax(0.0f, bar_bg.Max.x - bar_bg.Min.x);
+    const float fill_w = bar_w * (state->shown / 100.f);
+    const ImRect bar_fill(bar_bg.Min, ImVec2(bar_bg.Min.x + fill_w, bar_bg.Max.y));
+
+
+
+
+
     state->song_name_font = (font->is_russian_text(song.name) ? font->get(suisse_intl_medium_data, 24) : font->get(poppins_medium_data, 28));
-    state->author_font = (font->is_russian_text(song.author) ? font->get(suisse_intl_medium_data, 22) : font->get(poppins_medium_data, 22));
+    state->author_name_font = (font->is_russian_text(song.author) ? font->get(suisse_intl_medium_data, 16) : font->get(poppins_medium_data, 18));
     //window->DrawList->PushClipRect(total.Min, total.Max, true);
     //draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context, SCALE(elements->widgets.rounding), 1);
     //window->DrawList->PopClipRect();
@@ -443,7 +509,7 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
         draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f)),
         0
     );
-
+// name
     draw->text_clipped(
         window->DrawList,
         state->song_name_font,
@@ -453,6 +519,19 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
         song.name.c_str(),
         gui->text_end(song.name.c_str())
     );
+
+// author
+
+    draw->text_clipped(
+        window->DrawList,
+        state->author_name_font,
+        ImVec2(total.Min.x + total.GetSize().x / 2 - state->author_name_font->CalcTextSizeA(font->is_russian_text(song.author) ? 16 : 18, FLT_MAX, 0.f, song.author.c_str()).x / 2, img_zone.Max.y + SCALE(40.f)),
+        ImVec2(img_zone.Max.x, img_zone.Max.y + SCALE(70.f)),
+        draw->get_clr(clr->main.text, state->img_alpha * 0.5),
+        song.author.c_str(),
+        gui->text_end(song.author.c_str())
+    );
+
 
 //img
 
@@ -470,6 +549,31 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
 
     draw->line(window->DrawList, total.Max, ImVec2(total.Max.x - line_length, total.Max.y), corner_clr, line_thick);
     draw->line(window->DrawList, total.Max, ImVec2(total.Max.x, total.Max.y - line_length), corner_clr, line_thick);
+
+// progress
+
+
+
+
+    const float pulse = (sinf((float)g.Time * 5.0) * 0.5f + 0.5f);
+    const float glow_alpha = 0.10 + pulse * 0.18f;
+
+    draw->rect_filled(window->DrawList, bar_bg.Min, bar_bg.Max, draw->get_clr(clr->main.text, 0.08f), SCALE(4.f));
+
+    if (fill_w > 1.0)
+    {
+        draw->rect_filled(window->DrawList, bar_fill.Min - SCALE(0.f, 4.f), bar_fill.Max + SCALE(0.f, 4.f), draw->get_clr(clr->main.accent, glow_alpha * 0.55), SCALE(7.f));
+
+        draw->rect_filled(window->DrawList, bar_fill.Min - SCALE(0.f, 2.f), bar_fill.Max + SCALE(0.f, 2.f), draw->get_clr(clr->main.accent, glow_alpha), SCALE(6.f));
+    }
+
+    draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f) , 1.0f), SCALE(4.f));
+
+
+    draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.20f)), SCALE(4.f));
+
+
+
 
 
 

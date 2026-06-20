@@ -47,60 +47,12 @@ void c_gui::render()
 
 		gui->begin_content("content", gui->window_size(), SCALE(elements->window.padding), SCALE(elements->widgets.spacing.x, elements->window.padding.y), window_flags_no_scroll_with_mouse | window_flags_no_scrollbar);
 		{
-
-
-			//gui->push_var(style_var_alpha, var->gui.stage_alpha);
-			//if (var->gui.active_stage > 0)
-			//{
-			//	widgets->top_bar("https://google.com","something", "17.03.2026");
-			//	gui->sameline();
-			//	widgets->settings_button();
-			//}
-			//gui->pop_var();
+			
+			widgets->top_bar("https://google.com","something", "17.03.2026");
 			gui->push_var(style_var_alpha, var->gui.content_alpha * var->gui.stage_alpha);
-			//if (var->gui.active_section == 1)
-			//{
-			//	widgets->widgets_child("General", gui->language("General", "Общие", true), "O");
-			//	{
-			//		static bool launch_win{ true };
-			//		widgets->checkbox_ex("Launch on Windows startup", gui->language("Launch on Windows startup", "Запуск при старте Windows", true), &launch_win);
-			//		static bool start_min{ false };
-			//		widgets->checkbox_ex("Start minimized to tray", gui->language("Start minimized to tray", "Запуск сворачивается в трей", true), &start_min);
-			//		static bool show_up{ true };
-			//		widgets->checkbox_ex("Show Update Notifications", gui->language("Show Update Notifications", "Показать уведомления об обновлениях", true), &show_up);
-			//	}
-			//	widgets->widgets_end_child();
-			//	gui->set_screen_pos(GImGui->LastItemData.Rect.Max.y + SCALE(elements->widgets.spacing.y), pos_y);
-			//	widgets->selection_buttons("Language", gui->language("Language", "Язык", true), "English", "Русский", var->gui.lang_count);
-
-			//	widgets->widgets_child("Integration", gui->language("Integration", "Интеграция", true), "P");
-			//	{
-			//		static bool auto_in{ false };
-			//		widgets->checkbox_ex("Auto-Inject on Game Launch", gui->language("Auto-Inject on Game Launch", "Автоинъекция при запуске игры", true), &auto_in);
-			//		static bool enable_in{ true };
-			//		widgets->checkbox_ex("Enable In-Game Overlay", gui->language("Enable In-Game Overlay", "Включение игрового наложения", true), &enable_in);
-			//	}
-			//	widgets->widgets_end_child();
-			//	static int process_sel{ 1 };
-			//	gui->set_screen_pos(GImGui->LastItemData.Rect.Max.y + SCALE(elements->widgets.spacing.y), pos_y);
-			//	widgets->selection_buttons("Game Process Priority", gui->language("Game Process Priority", "Приоритет игрового процесса", true), gui->language("Normal", "Нормальный", true), gui->language("High", "Высокий", true), process_sel);
-
-			//	widgets->widgets_child("Security", gui->language("Security", "Безопасность", true), "Q");
-			//	{
-			//		static bool auto_cl{ true };
-			//		widgets->checkbox_ex("Automatically Clear Traces on Exit", gui->language("Automatically Clear Traces on Exit", "Автоматическая очистка следов при выходе", true), &auto_cl);
-			//		static bool enable_hwid{ true };
-			//		widgets->checkbox_ex("Enable HWID Spoofer", gui->language("Enable HWID Spoofer", "Включить HWID Spoofer", true), &enable_hwid);
-			//		static bool self_d{ false };
-			//		widgets->checkbox_ex("Self-Destruct on Analysis Detection", gui->language("Self-Destruct on Analysis Detection", "Самоуничтожение при обнаружении анализа", true), &self_d);
-			//	}
-			//	widgets->widgets_end_child();
-			//}
-
+			gui->dummy(ImVec2(0,elements->top_bar.padding.y));
 			if(var->gui.active_section == 0)
 			{
-				//if (var->gui.active_stage == 0)
-					//widgets->log_reg_page();
 				Song play_song = {};
 
 				gui->begin_content("music_list", ImVec2(gui->content_avail().x * 0.6f, gui->content_avail().y), SCALE(0, 0), SCALE(elements->window.padding), window_flags_no_scrollbar);
@@ -135,6 +87,7 @@ void c_gui::render()
 				gui->begin_content("music_player", ImVec2(gui->content_avail().x, gui->content_avail().y), SCALE(0, 0), SCALE(elements->window.padding), window_flags_no_scroll_with_mouse | window_flags_no_scrollbar);
 				{
 					widgets->player("music_player_panel", elements->music_player.current_song);
+
 				}
 				gui->end_content();
 			}
