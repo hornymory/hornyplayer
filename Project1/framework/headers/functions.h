@@ -253,7 +253,7 @@ public:
 
     void render();
     
-    void draw_node();
+    void draw_background();
 
     void drag_window();
 

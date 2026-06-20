@@ -13,6 +13,7 @@ struct Song
 	ID3D11ShaderResourceView* texture{ nullptr };
 
 	bool texture_created{ false };
+	bool play{ false };
 };
 
 

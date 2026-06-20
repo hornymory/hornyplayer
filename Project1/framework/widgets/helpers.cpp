@@ -2,7 +2,8 @@
 #include "../headers/widgets.h"
 #include "../headers/node.h"
 #include"../headers/emoj.h"
-
+#include <stb_image.h>
+#include"../data/images.h"
 void c_gui::push_color(style_col idx, ImU32 col)
 {
     gui_color_mod backup;
@@ -22,22 +23,8 @@ void c_gui::pop_color(int count)
         count--;
     }
 }
-void c_gui::draw_node() 
+void c_gui::draw_background() 
 {
-    //ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    //ImVec2 win_pos = ImGui::GetWindowPos();
-    //ImVec2 win_size = ImGui::GetWindowSize();
-    //ImVec2 win_end = ImVec2(win_pos.x + win_size.x, win_pos.y + win_size.y);
-    ////draw_list->AddRectFilledMultiColor(
-    ////    win_pos, win_end,
-    ////    ImColor(5, 5, 5, 255),    // 050505
-    ////    ImColor(5, 5, 5, 255),
-    ////    ImColor(21, 21, 21, 255), // 151515
-    ////    ImColor(21, 21, 21, 255)
-    ////);
-    //draw_nodes_background(draw_list, var->winapi.device_dx11,var->winapi.device_context);
-
-    //draw_background_blur(draw_list, var->winapi.device_dx11, var->winapi.device_context,var->window.rounding,6);
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
     ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -50,27 +37,20 @@ void c_gui::draw_node()
         )
     );
 
-    static std::vector<std::string> emoj =
-    {
-        "^^",
-        ":D",
-        "0_0",
-        "^-^",
-        "*~*",
-        "àûô"
-    };
+
+    draw->image(draw_list, var->gui.background, area.Min, area.Max);
 
     draw_text_snow(
         draw_list,
         area,
-        emoj,
-        IM_COL32(255, 0, 0, 180),
-        30,
+        elements->background.symbols,
+        clr->window.particle_color,
+        elements->background.count,
         (float)ImGui::GetTime()
     );
-    draw_list->AddRectFilled(window->Pos, window->Pos + window->Size, ImColor(8, 8, 10, 200),var->window.rounding);
-
-
+    window->DrawList->PushClipRect(ImVec2(area.Min.x + SCALE(9.f),area.Min.y), ImVec2(area.Max.x - SCALE(9.f), area.Max.y), true);
+    draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context, SCALE(elements->widgets.rounding), 1);
+    window->DrawList->PopClipRect();
 }
 
 
@@ -1558,7 +1538,7 @@ void c_gui::draw_decorations()
     const ImVec2 size = gui->window_size();
     ImDrawList* drawlist = gui->window_drawlist();
 
-    draw->rect_filled(drawlist, pos + SCALE(1, 1), pos + size - SCALE(1, 1), draw->get_clr(clr->window.background), var->style.window_rounding);
+    //draw->rect_filled(drawlist, pos + SCALE(1, 1), pos + size - SCALE(1, 1), draw->get_clr(clr->window.background), var->style.window_rounding);
     draw->rect(drawlist, pos + SCALE(1, 1), pos + size - SCALE(1, 1), draw->get_clr(clr->main.text, 0.04), var->style.window_rounding, SCALE(1));
     //draw->image_rounded(drawlist, var->gui.menu_background, pos + SCALE(1, 1), pos + size - SCALE(1, 1), ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({ 1.f, 1.f, 1.f, 1.f }), var->style.window_rounding);
 }
@@ -1568,5 +1548,41 @@ void c_gui::initialize()
     cfg->init_config();
     notify->setup_notify();
 
+    if (!var->gui.background)
+    {
+        int width, height, channels;
+        unsigned char* pixels = stbi_load_from_memory(
+            background_image,
+            sizeof(background_image),
+            &width, &height, &channels, 4
+        );
 
+        if (pixels)
+        {
+            D3D11_TEXTURE2D_DESC desc = {};
+            desc.Width = width;
+            desc.Height = height;
+            desc.MipLevels = 1;
+            desc.ArraySize = 1;
+            desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            desc.SampleDesc.Count = 1;
+            desc.Usage = D3D11_USAGE_DEFAULT;
+            desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+
+            D3D11_SUBRESOURCE_DATA sd = {};
+            sd.pSysMem = pixels;
+            sd.SysMemPitch = width * 4;
+
+            ID3D11Texture2D* texture = nullptr;
+            var->winapi.device_dx11->CreateTexture2D(&desc, &sd, &texture);
+
+            if (texture)
+            {
+                var->winapi.device_dx11->CreateShaderResourceView(texture, nullptr, &var->gui.background);
+                texture->Release();
+            }
+
+            stbi_image_free(pixels);
+        }
+    }
 }

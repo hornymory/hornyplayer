@@ -542,6 +542,59 @@ static void end_blur(const ImDrawList* parent_list, const ImDrawCmd* cmd)
 //        draw_list->AddImageRounded((ImTextureID)g_blur_srv1, window_pos, window_end, { ImGui::GetCurrentWindow()->Pos.x / ImGui::GetIO().DisplaySize.x, ImGui::GetCurrentWindow()->Pos.y / ImGui::GetIO().DisplaySize.y }, ImGui::GetCurrentWindow()->Pos / ImGui::GetIO().DisplaySize + ImGui::GetCurrentWindow()->Size / ImGui::GetIO().DisplaySize, color, rounding, ImDrawFlags_RoundCornersAll);
 //    }
 //}
+//void draw_background_blur(
+//    ImDrawList* draw_list,
+//    ID3D11Device* device,
+//    ID3D11DeviceContext* ctx,
+//    float rounding,
+//    float strength
+//)
+//{
+//    if (strength <= 0.0f)
+//        return;
+//
+//    ImGuiWindow* window = ImGui::GetCurrentWindow();
+//
+//    if (window->Hidden || window->SkipItems || ImGui::GetStyle().Alpha < 0.01f)
+//        return;
+//
+//    int passes = (int)strength;
+//
+//    blur_callback_data* data = new blur_callback_data{ device, ctx, nullptr, 0 };
+//
+//    draw_list->AddCallback(begin_blur, data);
+//
+//    for (int i = 0; i < passes; i++)
+//        draw_list->AddCallback(blur_pass, data);
+//
+//    draw_list->AddCallback(end_blur, data);
+//
+//    ID3D11ShaderResourceView* final_srv =
+//        (passes % 2 == 0) ? g_blur_srv1 : g_blur_srv2;
+//
+//    if (!final_srv)
+//        return;
+//
+//    const float alpha = ImGui::GetStyle().Alpha;
+//    const ImU32 color = IM_COL32(255, 255, 255, static_cast<int>(255 * alpha));
+//
+//    ImVec2 window_pos = ImGui::GetWindowPos();
+//    ImVec2 window_size = ImGui::GetWindowSize();
+//    ImVec2 window_end = window_pos + window_size;
+//
+//    draw_list->AddImageRounded(
+//        (ImTextureID)final_srv,
+//        window_pos,
+//        window_end,
+//        ImVec2(0, 0),
+//        ImVec2(1, 1),
+//        color,
+//        rounding,
+//        ImDrawFlags_RoundCornersAll
+//    );
+//}
+
+
 void draw_background_blur(
     ImDrawList* draw_list,
     ID3D11Device* device,
@@ -552,47 +605,47 @@ void draw_background_blur(
 {
     if (strength <= 0.0f)
         return;
-
     ImGuiWindow* window = ImGui::GetCurrentWindow();
-
     if (window->Hidden || window->SkipItems || ImGui::GetStyle().Alpha < 0.01f)
         return;
 
     int passes = (int)strength;
-
     blur_callback_data* data = new blur_callback_data{ device, ctx, nullptr, 0 };
-
     draw_list->AddCallback(begin_blur, data);
-
     for (int i = 0; i < passes; i++)
         draw_list->AddCallback(blur_pass, data);
-
     draw_list->AddCallback(end_blur, data);
 
     ID3D11ShaderResourceView* final_srv =
         (passes % 2 == 0) ? g_blur_srv1 : g_blur_srv2;
-
     if (!final_srv)
         return;
+
+    // ЅерЄм текущий клип-рект Ч это и есть область виджета
+    ImVec4 clip = draw_list->_ClipRectStack.back();
+    ImVec2 rect_min = ImVec2(clip.x, clip.y);
+    ImVec2 rect_max = ImVec2(clip.z, clip.w);
+
+    // —читаем UV относительно размера экрана
+    ImVec2 display = ImGui::GetIO().DisplaySize;
+    ImVec2 uv0 = ImVec2(rect_min.x / display.x, rect_min.y / display.y);
+    ImVec2 uv1 = ImVec2(rect_max.x / display.x, rect_max.y / display.y);
 
     const float alpha = ImGui::GetStyle().Alpha;
     const ImU32 color = IM_COL32(255, 255, 255, static_cast<int>(255 * alpha));
 
-    ImVec2 window_pos = ImGui::GetWindowPos();
-    ImVec2 window_size = ImGui::GetWindowSize();
-    ImVec2 window_end = window_pos + window_size;
-
     draw_list->AddImageRounded(
         (ImTextureID)final_srv,
-        window_pos,
-        window_end,
-        ImVec2(0, 0),
-        ImVec2(1, 1),
+        rect_min,
+        rect_max,
+        uv0,
+        uv1,
         color,
         rounding,
         ImDrawFlags_RoundCornersAll
     );
 }
+
 void release_blur_resources()
 {
     if (g_pixel_shader_copy)

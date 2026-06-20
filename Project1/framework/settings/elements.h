@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "imgui.h"
-
+#include "../headers/songs.h"
 class c_elements
 {
 public:
@@ -147,6 +147,16 @@ public:
 		float window_alpha{ 0 };
 	} loading;
 
+	struct
+	{
+		std::vector<std::string> symbols{ "1","0"};
+		int count{ 15 };
+	}background;
+	struct
+	{
+		float pad{ 8.f };
+		Song current_song{};
+	}music_player;
 	struct
 	{
 		ImVec2 size{ 90,50 };

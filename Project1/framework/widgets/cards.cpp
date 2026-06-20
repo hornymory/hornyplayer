@@ -185,6 +185,8 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
         float alpha[3]{ 1.f, 0.f, 0.03f };
         bool clicked{ false };
         bool hovered{ false };
+        ImFont* author_font;
+        ImFont* song_name_font;
     };
 
     ImGuiWindow* window = gui->get_window();
@@ -198,7 +200,7 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
     const ImVec2 pos = window->DC.CursorPos;
 
     float card_width =
-        (window->WorkRect.Max.x / 1.5 - window->WorkRect.Min.x)
+        (window->WorkRect.Max.x  - window->WorkRect.Min.x)
         - SCALE(elements->widgets.spacing.x);
 
     const ImRect total(
@@ -228,6 +230,10 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
     song_card_state* state = gui->anim_container<song_card_state>(id);
     state->hovered = total.Contains(g.IO.MousePos);
 
+
+    state->song_name_font = (font->is_russian_text(song.name) ? font->get(suisse_intl_medium_data, 16) : font->get(poppins_medium_data, 18));
+    state->author_font = (font->is_russian_text(song.author) ? font->get(suisse_intl_medium_data, 13) : font->get(poppins_medium_data, 16));
+
     if (pressed)
     {
         state->clicked = true;
@@ -241,6 +247,9 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
         // audio_player.play(song.path);
         //
         // ================================
+        //song.play = !song.play;
+        
+        
     }
 
     if (state->alpha[0] <= 0.11f)
@@ -250,34 +259,28 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
 
     gui->easing(state->alpha[0], state->clicked ? 0.1f : 1.f, 6.f, static_easing);
     gui->easing(state->alpha[1], state->clicked ? 0.6f : 0.f, 6.f, static_easing);
-    gui->easing(state->alpha[2], state->hovered ? 0.05f : 0.03f, 0.1f, static_easing);
+    gui->easing(state->alpha[2], state->hovered || song.play ? 0.1f : 0.0f, 0.3f, static_easing);
 
-    //window->DrawList->PushClipRect(total.Min, total.Max, true);
-    //draw_background_blur(
-    //    window->DrawList,
-    //    var->winapi.device_dx11,
-    //    var->winapi.device_context,
-    //    elements->game_card.blur
-    //);
-    //window->DrawList->PopClipRect();
 
-    draw->rect_filled(
-        window->DrawList,
-        total.Min,
-        total.Max,
-        draw->get_clr(clr->main.text, state->alpha[2]),
-        SCALE(0)
-    );
 
-    draw->rect(
-        window->DrawList,
-        total.Min,
-        total.Max,
-        draw->get_clr(clr->main.text, 0.04f),
-        SCALE(0)
-    );
 
-    // Картинка песни
+
+    if (hovered || song.play == true)
+    {
+
+        ImVec4 stroke_color(1.0f, 0.176f, 0.49f, state->alpha[2]);// Розовый акцент с динамической альфой
+        draw->rect(
+            window->DrawList,
+            total.Min,
+            total.Max,
+            draw->get_clr(stroke_color),
+            0,              // Скругление (0 — острые углы)
+            0,              // Число сегментов
+            SCALE(1.5f)     // Толщина линии обводки
+        );
+    }
+    draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(ImGui::ColorConvertU32ToFloat4(clr->main.music_list_selected),state->alpha[2]), 0);
+
     if (song.texture)
     {
         draw->image_rounded(
@@ -288,18 +291,12 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
             ImVec2(0, 0),
             ImVec2(1, 1),
             draw->get_clr({ 1.f, 1.f, 1.f, 1.f }),
-            SCALE(elements->game_card.img_rounding)
+            //SCALE(elements->game_card.img_rounding)
+            0
         );
     }
     else
     {
-        draw->rect_filled(
-            window->DrawList,
-            img_zone.Min,
-            img_zone.Max,
-            draw->get_clr(clr->main.text, 0.08f),
-            SCALE(0)
-        );
 
         draw->text_clipped(
             window->DrawList,
@@ -324,12 +321,12 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
 
     float text_start_x = img_zone.Max.x + SCALE(8.f);
 
-    float name_y = total.Min.y + SCALE(15.f);
-    float author_y = total.Min.y + SCALE(35.f);
+    float name_y = (total.Min.y + total.GetSize().y /2  - state->song_name_font->CalcTextSizeA(font->is_russian_text(song.name) ? 16 : 18, FLT_MAX, 0.f, song.name.c_str()).y / 2 ) - SCALE(10.f);  
+    float author_y = (total.Min.y + total.GetSize().y / 2 - state->author_font->CalcTextSizeA(font->is_russian_text(song.name) ? 13 : 16, FLT_MAX, 0.f, song.author.c_str()).y / 2) + SCALE(10.f);
 
     draw->text_clipped(
         window->DrawList,
-        font->get(suisse_intl_medium_data, 14),
+        state->song_name_font,
         ImVec2(text_start_x, name_y),
         total.Max,
         draw->get_clr(clr->main.text),
@@ -339,7 +336,7 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
 
     draw->text_clipped(
         window->DrawList,
-        font->get(suisse_intl_medium_data, 12),
+        state->author_font,
         ImVec2(text_start_x, author_y),
         total.Max,
         draw->get_clr(clr->main.text, 0.55f),
@@ -349,6 +346,204 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
 
     gui->set_screen_pos(total.Min, pos_all);
     gui->dummy(total.GetSize() + ImVec2(0, SCALE(5.f)));
-
-    return pressed;
+    if (state->clicked)
+    {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
+
+bool c_widgets::player(std::string_view widgets_id, Song& song)
+{
+    struct song_card_state
+    {
+        float alpha[3]{ 1.f, 0.f, 0.03f };
+        bool clicked{ false };
+        bool hovered{ false };
+
+        float img_alpha{ 0.f };
+        std::string last_song_name{};
+        ImFont* author_font;
+        ImFont* song_name_font;
+    };
+
+    ImGuiWindow* window = gui->get_window();
+    if (window->SkipItems)
+        return false;
+
+    ImGuiContext& g = *GImGui;
+    const ImGuiStyle& style = g.Style;
+    const ImGuiID id = window->GetID(widgets_id.data());
+
+    const ImVec2 pos = window->DC.CursorPos;
+    
+
+    const ImRect total(
+        pos,
+        pos + ImVec2(window->WorkRect.Max.x - window->WorkRect.Min.x, window->WorkRect.Max.y - window->WorkRect.Min.y )
+    );
+
+    float image_size = SCALE(370.f); // размер задаёшь тут
+
+    float center_x = total.Min.x + total.GetSize().x / 2.f - image_size / 2.f;
+    float top_y = total.Min.y + SCALE(40.f);
+
+    const ImRect img_zone(
+        ImVec2(center_x, top_y),
+        ImVec2(center_x + image_size, top_y + image_size)
+    );
+    gui->item_size(total, style.FramePadding.y);
+
+    if (!gui->item_add(total, id))
+        return false;
+    song_card_state* state = gui->anim_container<song_card_state>(id);
+
+    // если сменилась песня — сбрасываем альфу
+    if (state->last_song_name != song.name)
+    {
+        state->img_alpha = 0.f;
+        state->last_song_name = song.name;
+    }
+
+    // поднимаем альфу если есть текстура
+    gui->easing(state->img_alpha, song.texture ? 0.8f : 0.f, 6.f, static_easing);
+    
+    state->song_name_font = (font->is_russian_text(song.name) ? font->get(suisse_intl_medium_data, 24) : font->get(poppins_medium_data, 28));
+    state->author_font = (font->is_russian_text(song.author) ? font->get(suisse_intl_medium_data, 22) : font->get(poppins_medium_data, 22));
+    //window->DrawList->PushClipRect(total.Min, total.Max, true);
+    //draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context, SCALE(elements->widgets.rounding), 1);
+    //window->DrawList->PopClipRect();
+
+    draw->rect(
+        window->DrawList,
+        total.Min,
+        total.Max,
+        draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f)),
+        0
+    );
+    draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(ImVec4(14.f / 255.f, 14.f / 255.f, 14.f / 255.f, 40.f / 100.f)), 0);
+
+    float line_length = SCALE(20.f);  // Длина сторон уголка
+    float line_thick = SCALE(4.f);   // Толщина линий
+    auto corner_clr = draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f), 1.0f); // Твой цвет
+        
+
+    draw->image(window->DrawList, song.texture, img_zone.Min, img_zone.Max,
+        ImVec2(0, 0), ImVec2(1, 1),
+        IM_COL32(255, 255, 255, (int)(255 * state->img_alpha))
+    );
+
+
+    draw->rect(
+        window->DrawList,
+        img_zone.Min,
+        img_zone.Max,
+        draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f)),
+        0
+    );
+
+    draw->text_clipped(
+        window->DrawList,
+        state->song_name_font,
+        ImVec2(total.Min.x + total.GetSize().x / 2 - state->song_name_font->CalcTextSizeA(font->is_russian_text(song.name) ? 26 : 28,FLT_MAX,0.f,song.name.c_str()).x /2, img_zone.Max.y  + SCALE(15.f)),
+        ImVec2(img_zone.Max.x,img_zone.Max.y + SCALE(40.f)),
+        draw->get_clr(clr->main.text, state->img_alpha),
+        song.name.c_str(),
+        gui->text_end(song.name.c_str())
+    );
+
+//img
+
+    draw->line(window->DrawList, ImVec2(img_zone.Max.x + line_thick / 2.f, img_zone.Min.y), ImVec2(img_zone.Max.x - line_length, img_zone.Min.y), corner_clr, line_thick);
+    draw->line(window->DrawList, ImVec2(img_zone.Max.x, img_zone.Min.y), ImVec2(img_zone.Max.x, img_zone.Min.y + line_length), corner_clr, line_thick);
+
+    draw->line(window->DrawList, ImVec2(img_zone.Min.x - line_thick / 2.f, img_zone.Max.y), ImVec2(img_zone.Min.x + line_length, img_zone.Max.y), corner_clr, line_thick);
+    draw->line(window->DrawList, ImVec2(img_zone.Min.x, img_zone.Max.y + line_thick / 2.f), ImVec2(img_zone.Min.x, img_zone.Max.y - line_length), corner_clr, line_thick);
+
+
+//total
+
+    draw->line(window->DrawList, total.Min, ImVec2(total.Min.x + line_length, total.Min.y), corner_clr, line_thick);
+    draw->line(window->DrawList, total.Min, ImVec2(total.Min.x, total.Min.y + line_length), corner_clr, line_thick);
+
+    draw->line(window->DrawList, total.Max, ImVec2(total.Max.x - line_length, total.Max.y), corner_clr, line_thick);
+    draw->line(window->DrawList, total.Max, ImVec2(total.Max.x, total.Max.y - line_length), corner_clr, line_thick);
+
+
+
+    return false;
+}
+void c_widgets::background_songs()
+{
+    ImGuiWindow* window = gui->get_window();
+
+    ImGuiContext& g = *GImGui;
+    const ImGuiStyle& style = g.Style;
+
+    const ImVec2 pos = window->DC.CursorPos;
+
+
+    const ImRect total(
+        pos,
+        pos + ImVec2(window->WorkRect.Max.x - window->WorkRect.Min.x, window->WorkRect.Max.y - window->WorkRect.Min.y)
+    );
+    float plank_h = SCALE(81.f);
+    float plank_pad = SCALE(1.f); // чуть уже
+
+    // плашка сверху
+    ImRect top_plank(
+        ImVec2(total.Min.x + plank_pad, total.Min.y),
+        ImVec2(total.Max.x - plank_pad, total.Min.y + plank_h)
+    );
+
+    //window->DrawList->PushClipRect(total.Min, total.Max, true);
+    //draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context, SCALE(elements->widgets.rounding), 1);
+    //window->DrawList->PopClipRect();
+
+    draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(ImVec4(14.f / 255.f, 14.f / 255.f, 14.f / 255.f, 40.f / 100.f)), 0);
+
+    float line_length = SCALE(20.f);  // Длина сторон уголка
+    float line_thick = SCALE(4.f);   // Толщина линий
+    auto corner_clr = draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f), 1.0f); // Твой цвет
+    draw->rect_filled(window->DrawList, top_plank.Min, top_plank.Max,
+        draw->get_clr(ImVec4(28.f / 255.f, 27.f / 255.f, 27.f / 255.f, 95.f / 100.f)), SCALE(4.f));
+
+    draw->rect(
+        window->DrawList,
+        total.Min,
+        total.Max,
+        draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f)),
+        0
+    );
+    //// 1. Уголок: Слева Сверху
+    window->DrawList->AddLine(total.Min, ImVec2(total.Min.x + line_length, total.Min.y), corner_clr, line_thick);
+    window->DrawList->AddLine(total.Min, ImVec2(total.Min.x, total.Min.y + line_length), corner_clr, line_thick);
+
+    //// 2. Уголок: Справа Снизу
+    window->DrawList->AddLine(total.Max, ImVec2(total.Max.x - line_length, total.Max.y), corner_clr, line_thick);
+    window->DrawList->AddLine(total.Max, ImVec2(total.Max.x, total.Max.y - line_length), corner_clr, line_thick);
+    
+
+
+    draw->text_clipped(
+        window->DrawList,
+        font->get(poppins_medium_data, 28),
+        ImVec2(top_plank.Min.x + SCALE(10.f), top_plank.Min.y + (top_plank.GetSize().y / 2 ) - (font->get(suisse_intl_semi_bold_data,28)->FontSize/2.f)),
+        top_plank.Max,
+        draw->get_clr(clr->main.text),
+        "Library",
+        gui->text_end("Library")
+    );
+    draw->text_clipped(
+        window->DrawList,
+        font->get(poppins_medium_data, 30),
+        ImVec2(top_plank.Min.x + SCALE(9.f), top_plank.Min.y + (top_plank.GetSize().y / 2) - (font->get(suisse_intl_semi_bold_data, 30)->FontSize / 2.f)),
+        top_plank.Max,
+        draw->get_clr(clr->main.text,0.2f),
+        "Library",
+        gui->text_end("Library")
+    );
+}
+

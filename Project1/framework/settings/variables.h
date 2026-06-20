@@ -149,7 +149,8 @@ public:
 		c_video_player apex_player;
 		c_video_player fortnite_player;
 
-		ID3D11ShaderResourceView* menu_background{ nullptr };
+		ID3D11ShaderResourceView* background{ nullptr };
+
 		ID3D11ShaderResourceView* decoration[2]{};
 		ID3D11ShaderResourceView* img_for_versions[5]{};
 		ID3D11ShaderResourceView* games[6]{};

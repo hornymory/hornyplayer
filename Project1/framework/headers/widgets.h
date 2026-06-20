@@ -11,6 +11,8 @@ public:
 
     bool redirect_button();
 
+    bool player(std::string_view widgets_id, Song& song);
+
     void info_card(std::string_view widgets_id, std::string_view icon, std::string_view name, std::string_view desc, float width);
 
     bool progress_row(std::string_view widgets_id, std::string_view name, float procent, float width);
@@ -47,6 +49,7 @@ public:
     void widgets_end_child();
 
     void selection_buttons(std::string_view widgets_id, std::string_view name, std::string_view p1, std::string_view p2, int& variable);
+    void background_songs();
 
 };
 

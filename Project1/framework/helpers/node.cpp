@@ -336,28 +336,28 @@ static bool ensure_node_resources(ID3D11Device* device)
     return true;
 }
 
-void draw_nodes_background(ImDrawList* draw_list, ID3D11Device* device, ID3D11DeviceContext* ctx)
-{
-    if (!device || !ctx || !ensure_node_resources(device)) return;
-
-    nodes_callback_data* data = new nodes_callback_data();
-    data->device = device;
-    data->ctx = ctx;
-    data->state = nullptr;
-
-    data->cb_data.resolution[0] = ImGui::GetIO().DisplaySize.x;
-    data->cb_data.resolution[1] = ImGui::GetIO().DisplaySize.y;
-    data->cb_data.time = (float)ImGui::GetTime();
-    data->cb_data.line_weight = elements->node_settings.line_weight;
-    data->cb_data.speed = elements->node_settings.speed;
-    data->cb_data.base_color[0] = clr->window.node_color.Value.x;
-    data->cb_data.base_color[1] = clr->window.node_color.Value.y;
-    data->cb_data.base_color[2] = clr->window.node_color.Value.z;
-    data->cb_data.base_color[3] = clr->window.node_color.Value.w;
-    draw_list->AddCallback(begin_node, data);
-    draw_list->AddCallback(nodes_render_pass, data);
-    draw_list->AddCallback(end_node, data);
-}
+//void draw_nodes_background(ImDrawList* draw_list, ID3D11Device* device, ID3D11DeviceContext* ctx)
+//{
+//    if (!device || !ctx || !ensure_node_resources(device)) return;
+//
+//    nodes_callback_data* data = new nodes_callback_data();
+//    data->device = device;
+//    data->ctx = ctx;
+//    data->state = nullptr;
+//
+//    data->cb_data.resolution[0] = ImGui::GetIO().DisplaySize.x;
+//    data->cb_data.resolution[1] = ImGui::GetIO().DisplaySize.y;
+//    data->cb_data.time = (float)ImGui::GetTime();
+//    data->cb_data.line_weight = elements->node_settings.line_weight;
+//    data->cb_data.speed = elements->node_settings.speed;
+//    data->cb_data.base_color[0] = clr->window.node_color.Value.x;
+//    data->cb_data.base_color[1] = clr->window.node_color.Value.y;
+//    data->cb_data.base_color[2] = clr->window.node_color.Value.z;
+//    data->cb_data.base_color[3] = clr->window.node_color.Value.w;
+//    draw_list->AddCallback(begin_node, data);
+//    draw_list->AddCallback(nodes_render_pass, data);
+//    draw_list->AddCallback(end_node, data);
+//}
 
 void release_node_resources()
 {

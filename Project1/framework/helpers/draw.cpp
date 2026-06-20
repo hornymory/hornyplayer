@@ -68,6 +68,12 @@ void c_draw::rect_filled_multi_color(ImDrawList* draw, const ImVec2& p_min, cons
             float g = g1 + (g2 - g1) * Y;
             float b = b1 + (b2 - b1) * Y;
             float a = a1 + (a2 - a1) * Y;
+
+            float noise = (((int)(vert->pos.x + ImGui::GetTime() * 1000) ^ (int)(vert->pos.y)) & 3) * (1.f / 255.f) - (2.f / 255.f);
+            r = ImClamp(r + noise, 0.f, 1.f);
+            g = ImClamp(g + noise, 0.f, 1.f);
+            b = ImClamp(b + noise, 0.f, 1.f);
+
             ImVec4 RGBA(r, g, b, a);
 
             RGBA = RGBA * ImGui::ColorConvertU32ToFloat4(vert->col);

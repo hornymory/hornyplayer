@@ -30,6 +30,26 @@ void load_songs(SongsManager& manager)
                 );
             }
         }
+
+        if (pMetadata->type == DRFLAC_METADATA_BLOCK_TYPE_VORBIS_COMMENT) {
+            const auto& vc = pMetadata->data.vorbis_comment;
+            drflac_vorbis_comment_iterator it;
+            drflac_init_vorbis_comment_iterator(&it, vc.commentCount, vc.pComments);
+            drflac_uint32 len = 0;
+            const char* comment = drflac_next_vorbis_comment(&it, &len);
+            while (comment) {
+                std::string s(comment, len);
+                // переводим ключ в верхний регистр дл€ сравнени€
+                std::string upper = s;
+                std::transform(upper.begin(), upper.end(), upper.begin(), ::toupper);
+
+                if (upper.rfind("TITLE=", 0) == 0)
+                    song->name = s.substr(6);
+                else if (upper.rfind("ARTIST=", 0) == 0)
+                    song->author = s.substr(7);
+                comment = drflac_next_vorbis_comment(&it, &len);
+            }
+        }
         };
 
     for (const auto& entry : std::filesystem::directory_iterator(manager.music_path)) {
