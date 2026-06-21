@@ -156,6 +156,7 @@ public:
 	{
 		float pad{ 8.f };
 		Song current_song{};
+		SongsManager manager{};
 	}music_player;
 	struct
 	{

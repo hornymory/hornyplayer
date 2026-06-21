@@ -2,6 +2,8 @@
 #include<string>
 #include<vector>
 #include<d3d11.h>
+#include"miniaudio.h"
+
 struct Song
 {
 	std::wstring path;
@@ -25,9 +27,21 @@ struct SongsManager
 	bool isLoad{ false };
 	std::vector<Song> songs;
 
+	ma_engine engine{};
+	ma_sound current_sound{};
+	bool engine_initialized{ false };
+	bool sound_loaded{ false };
+	float volume{ 0.5f };
+
 
 };
 
 void load_songs(SongsManager& manager);
 void EnsureSongTextureCreated(Song& song, ID3D11Device* device);
 
+void init_audio(SongsManager& manager);
+ma_result play_song(SongsManager& manager, Song& song);
+void update_song_progress(SongsManager& manager, Song& song);
+void seek_song(SongsManager& manager, Song& song, float percent);
+void pause_song(SongsManager& manager);
+void set_volume(SongsManager& manager, float volume);

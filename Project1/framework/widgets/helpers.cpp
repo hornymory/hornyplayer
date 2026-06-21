@@ -264,6 +264,7 @@ void c_gui::begin_content(std::string_view id, const ImVec2& size, const ImVec2&
     gui->push_var(ImGuiStyleVar_WindowPadding, padding);
     gui->begin_def_child(id, size, child_flags_none, flags | window_flags_always_use_window_padding | window_flags_no_saved_settings | window_flags_no_focus_on_appearing);
     gui->push_var(ImGuiStyleVar_ItemSpacing, spacing);
+
 }
 
 void c_gui::end_content()

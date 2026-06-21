@@ -98,7 +98,6 @@ int main(int, char**)
     var->gui.manager.music_path = L"C:/Users/hornymory/Music";
     load_songs(var->gui.manager);
 
-
     for (auto& song : var->gui.manager.songs)
     {
         EnsureSongTextureCreated(
@@ -107,6 +106,9 @@ int main(int, char**)
         );
     }
     bool done = false;
+    init_audio(var->gui.manager);
+
+    
     while (!done)
     {
         //static auto lastFrame = std::chrono::steady_clock::now();

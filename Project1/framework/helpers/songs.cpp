@@ -1,4 +1,8 @@
 #include <filesystem>
+#include"../headers/includes.h"
+
+#define MINIAUDIO_IMPLEMENTATION
+#include"miniaudio.h"
 #include "../headers/songs.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -161,4 +165,90 @@ void EnsureSongTextureCreated(Song& song, ID3D11Device* device)
 
     song.icon_data.clear();
     song.icon_data.shrink_to_fit();
+}
+
+
+
+
+
+
+
+
+void init_audio(SongsManager& manager)
+{
+    if (manager.engine_initialized)
+        return;
+    ma_result result = ma_engine_init(NULL, &manager.engine);
+    if (result == MA_SUCCESS)
+        manager.engine_initialized = true;
+}
+ma_result play_song(SongsManager& manager, Song& song)
+{
+    if (!manager.engine_initialized)
+        return (ma_result)-999;
+
+    if (manager.sound_loaded)
+    {
+        ma_sound_uninit(&manager.current_sound);
+        manager.sound_loaded = false;
+    }
+
+    ma_result res = ma_sound_init_from_file_w(&manager.engine, song.path.c_str(), 0, NULL, NULL, &manager.current_sound);
+
+    if (res == MA_SUCCESS)
+    {
+        ma_sound_start(&manager.current_sound);
+        manager.sound_loaded = true;
+        ma_sound_set_volume(&manager.current_sound, manager.volume);
+
+        ma_uint64 lenght_frames = 0;
+        ma_sound_get_length_in_pcm_frames(&manager.current_sound, &lenght_frames);
+        ma_uint32 sample_rate = ma_engine_get_sample_rate(&manager.engine);
+        song.full_time = (float)lenght_frames / sample_rate;
+    }
+
+    return res; // обязательно добавь
+}
+void update_song_progress(SongsManager& manager, Song& song)
+{
+    if (!manager.sound_loaded)
+        return;
+
+    ma_uint64 cursor_frames = 0;
+    ma_sound_get_cursor_in_pcm_frames(&manager.current_sound, &cursor_frames);
+    ma_uint32 sample_rate = ma_engine_get_sample_rate(&manager.engine);
+
+    song.current_time = (float)cursor_frames / sample_rate;
+}
+
+void seek_song(SongsManager& manager, Song& song, float percent)
+{
+    if (!manager.sound_loaded)
+        return;
+
+    percent = ImClamp(percent, 0.f, 1.f);
+
+    ma_uint64 length_frames = 0;
+    ma_sound_get_length_in_pcm_frames(&manager.current_sound, &length_frames);
+
+    ma_uint64 target_frame = (ma_uint64)(length_frames * percent);
+
+    ma_sound_seek_to_pcm_frame(&manager.current_sound, target_frame);
+}
+void pause_song(SongsManager& manager)
+{
+    if (!manager.sound_loaded)
+        return;
+    
+    if (ma_sound_is_playing(&manager.current_sound))
+        ma_sound_stop(&manager.current_sound);
+    else
+        ma_sound_start(&manager.current_sound);
+}
+void set_volume(SongsManager& manager, float volume)
+{
+    if (!manager.sound_loaded)
+        return;
+    volume = ImClamp(volume, 0.f, 1.f);
+    ma_sound_set_volume(&manager.current_sound, volume);
 }

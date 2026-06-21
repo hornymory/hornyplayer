@@ -86,6 +86,7 @@ void c_gui::render()
 				gui->sameline(0.f,SCALE(elements->window.padding.x/2));
 				gui->begin_content("music_player", ImVec2(gui->content_avail().x, gui->content_avail().y), SCALE(0, 0), SCALE(elements->window.padding), window_flags_no_scroll_with_mouse | window_flags_no_scrollbar);
 				{
+					update_song_progress(var->gui.manager, elements->music_player.current_song);
 					widgets->player("music_player_panel", elements->music_player.current_song);
 
 				}

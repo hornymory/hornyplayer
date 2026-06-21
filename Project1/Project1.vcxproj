@@ -107,7 +107,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)thirdparty\imgui\backends;$(ProjectDir)thirdparty\imgui;$(ProjectDir)thirdparty\stb;$(ProjectDir)thirdparty\freetype\include;$(ProjectDir)thirdparty\ffmpeg\include;$(ProjectDir)thirdparty\portaudio\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)thirdparty\imgui\backends;$(ProjectDir)thirdparty\imgui;$(ProjectDir)thirdparty\stb;$(ProjectDir)thirdparty\freetype\include;$(ProjectDir)thirdparty\ffmpeg\include;$(ProjectDir)thirdparty\portaudio\inc;%(AdditionalIncludeDirectories);C:\Users\hornymory\Documents\GitHub\hornyplayer\Project1\thirdparty\miniaudio</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -128,7 +128,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)thirdparty\imgui\backends;$(ProjectDir)thirdparty\imgui;$(ProjectDir)thirdparty\stb;$(ProjectDir)thirdparty\freetype\include;$(ProjectDir)thirdparty\ffmpeg\include;$(ProjectDir)thirdparty\portaudio\inc;$(ProjectDir)thirdparty\dxsdk\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)thirdparty\imgui\backends;$(ProjectDir)thirdparty\imgui;$(ProjectDir)thirdparty\stb;$(ProjectDir)thirdparty\freetype\include;$(ProjectDir)thirdparty\ffmpeg\include;$(ProjectDir)thirdparty\portaudio\inc;$(ProjectDir)thirdparty\dxsdk\Include;%(AdditionalIncludeDirectories);C:\Users\hornymory\Documents\GitHub\hornyplayer\Project1\thirdparty\miniaudio</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>

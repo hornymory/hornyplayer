@@ -275,7 +275,8 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
         //
         // ================================
         //song.play = !song.play;
-        
+
+        ma_result res = play_song(var->gui.manager, song);
         
     }
 
@@ -450,7 +451,7 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
 
     // поднимаем альфу если есть текстура
     gui->easing(state->img_alpha, song.texture ? 0.8f : 0.f, 6.f, static_easing);
-    gui->easing(state->shown, p, 10.f, static_easing);
+    gui->easing(state->shown, p, 100.f, static_easing);
 
 
 
@@ -460,7 +461,7 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
 
 
     // progress
-    float bar_height = SCALE(6.f);
+    float bar_height = SCALE(4.f);
     float bar_y = img_zone.Max.y + SCALE(90.f);
 
     const ImRect bar_bg(
@@ -573,8 +574,72 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
     draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.20f)), SCALE(4.f));
 
 
+    bool bar_hovered = bar_bg.Contains(g.IO.MousePos);
+    bool bar_clicked = bar_hovered && g.IO.MouseClicked[0];
 
+    if (bar_clicked)
+    {
+        float click_x = g.IO.MousePos.x - bar_bg.Min.x;
+        float bar_width = bar_bg.Max.x - bar_bg.Min.x;
+        float click_percent = ImClamp(click_x / bar_width, 0.f, 1.f);
 
+        seek_song(var->gui.manager, song, click_percent);     
+    }
+
+    // ============ play/pause button ============
+
+    float btn_size = SCALE(40.f);
+    float controls_y = bar_bg.Max.y + SCALE(20.f);
+
+    ImVec2 play_btn_pos(
+        total.Min.x + total.GetSize().x / 2.f - btn_size / 2.f,
+        controls_y
+    );
+    ImRect play_btn(play_btn_pos, play_btn_pos + ImVec2(btn_size, btn_size));
+
+    bool play_hovered = play_btn.Contains(g.IO.MousePos);
+    bool play_clicked = play_hovered && g.IO.MouseClicked[0];
+
+    bool is_playing = ma_sound_is_playing(&var->gui.manager.current_sound);
+
+    draw->rect_filled(window->DrawList, play_btn.Min, play_btn.Max, draw->get_clr(clr->main.text, play_hovered ? 0.15f : 0.08f), SCALE(8.f));
+
+    draw->text_clipped(
+        window->DrawList,
+        font->get(icons_data, 20),
+        play_btn.Min, play_btn.Max,
+        draw->get_clr(clr->main.text),
+        is_playing ? "P" : "p", // подставь свои реальные символы паузы/плея
+        nullptr, nullptr,
+        ImVec2(0.5f, 0.5f)
+    );
+
+    if (play_clicked)
+        pause_song(var->gui.manager);
+
+    // ============ volume slider ============
+
+    float vol_width = SCALE(150.f);
+    float vol_y = play_btn.Max.y + SCALE(20.f);
+
+    ImRect vol_bar(
+        ImVec2(total.Min.x + total.GetSize().x / 2.f - vol_width / 2.f, vol_y),
+        ImVec2(total.Min.x + total.GetSize().x / 2.f + vol_width / 2.f, vol_y + SCALE(4.f))
+    );
+
+    bool vol_hovered = vol_bar.Contains(g.IO.MousePos);
+
+    if (vol_hovered && (ImGui::IsMouseClicked(0) || ImGui::IsMouseDragging(0)))
+    {
+        float x = ImClamp(g.IO.MousePos.x - vol_bar.Min.x, 0.f, vol_width);
+        var->gui.manager.volume = x / vol_width;
+        set_volume(var->gui.manager, var->gui.manager.volume);
+    }
+
+    draw->rect_filled(window->DrawList, vol_bar.Min, vol_bar.Max, draw->get_clr(clr->main.text, 0.1f), SCALE(2.f));
+
+    ImVec2 vol_fill_max(vol_bar.Min.x + vol_width * var->gui.manager.volume, vol_bar.Max.y);
+    draw->rect_filled(window->DrawList, vol_bar.Min, vol_fill_max, draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 1.0f)), SCALE(2.f));
 
 
     return false;
