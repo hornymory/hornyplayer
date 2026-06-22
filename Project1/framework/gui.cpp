@@ -23,7 +23,6 @@ void c_gui::render()
 				gui->window_drawlist(),
 				gui->window_pos(),
 				gui->window_pos() + gui->window_size(),
-				//draw->get_clr(clr->window.background, 0.22f * var->gui.resize_fade),
 				SCALE(var->window.rounding)
 			);
 		}
@@ -39,9 +38,6 @@ void c_gui::render()
 
 		if (var->gui.content_alpha == 0.f)
 			var->gui.active_section = var->gui.section_count;
-
-		//gui->easing(var->window.size.x, var->gui.stage_count > 0 ? var->window.new_width : var->window.default_size.x, 800.f, static_easing);
-		//gui->easing(var->window.size.y, var->gui.stage_count > 1 ? (var->gui.section_count == 1 ? var->window.section_1_height : var->window.stage_2_height) : (var->gui.section_count == 1 ? var->window.section_1_height : var->window.default_size.y), 200.f, static_easing);
 
 		gui->set_pos(SCALE(0, 0), pos_all);
 

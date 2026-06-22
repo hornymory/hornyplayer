@@ -23,8 +23,16 @@ public:
 		
 		ImColor text_field{ 28,28,28,179 };
 
-		ImU32 music_list_selected = IM_COL32(0xFF, 0x2D, 0x7D, 51);
 	} main;
+	
+	struct
+	{
+		ImU32 music_list_selected = IM_COL32(0xFF, 0x2D, 0x7D, 51);
+		ImVec4 border_color_rect = ImVec4(1.0f, 0.176f, 0.49f, 0.39f);
+		ImVec4 border_color_line = ImVec4(1.0f, 0.176f, 0.49f, 0.39f);
+		ImVec4 stroke_color = ImVec4(1.0f, 0.176f, 0.49f, 1.0f);
+
+	}music_player;
 	
 
 	struct

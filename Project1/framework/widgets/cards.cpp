@@ -61,20 +61,19 @@ void c_widgets::top_bar(std::string_view url, std::string_view text, std::string
         window->DrawList,
         total.Min,
         total.Max,
-        draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f)),
+        draw->get_clr(clr->music_player.border_color_rect),
         0
     );
     draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(ImVec4(14.f / 255.f, 14.f / 255.f, 14.f / 255.f, 40.f / 100.f)), 0);
 
     float line_length = SCALE(20.f);  
     float line_thick = SCALE(4.f);   
-    auto corner_clr = draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f), 1.0f); 
 
-    window->DrawList->AddLine(total.Min, ImVec2(total.Min.x + line_length, total.Min.y), corner_clr, line_thick);
-    window->DrawList->AddLine(total.Min, ImVec2(total.Min.x, total.Min.y + line_length), corner_clr, line_thick);
+    window->DrawList->AddLine(total.Min, ImVec2(total.Min.x + line_length, total.Min.y), draw->get_clr(clr->music_player.border_color_line), line_thick);
+    window->DrawList->AddLine(total.Min, ImVec2(total.Min.x, total.Min.y + line_length), draw->get_clr(clr->music_player.border_color_line), line_thick);
 
-    window->DrawList->AddLine(total.Max, ImVec2(total.Max.x - line_length, total.Max.y), corner_clr, line_thick);
-    window->DrawList->AddLine(total.Max, ImVec2(total.Max.x, total.Max.y - line_length), corner_clr, line_thick);
+    window->DrawList->AddLine(total.Max, ImVec2(total.Max.x - line_length, total.Max.y), draw->get_clr(clr->music_player.border_color_line), line_thick);
+    window->DrawList->AddLine(total.Max, ImVec2(total.Max.x, total.Max.y - line_length), draw->get_clr(clr->music_player.border_color_line), line_thick);
 
     ImVec2 close_pos(total.Max.x - SCALE(30.f), total.Min.y + (total.GetSize().y / 2.f) - SCALE(9.f));
     ImVec2 minimize_pos(total.Max.x - SCALE(60.f), total.Min.y + (total.GetSize().y / 2.f) - SCALE(18.f));
@@ -273,18 +272,17 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
     if (hovered || song.play == true)
     {
 
-        ImVec4 stroke_color(1.0f, 0.176f, 0.49f, state->alpha[2]);// Розовый акцент с динамической альфой
         draw->rect(
             window->DrawList,
             total.Min,
             total.Max,
-            draw->get_clr(stroke_color),
+            draw->get_clr(clr->music_player.stroke_color,state->alpha[2]),
             0,              // Скругление (0 — острые углы)
             0,              // Число сегментов
             SCALE(1.5f)     // Толщина линии обводки
         );
     }
-    draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(ImGui::ColorConvertU32ToFloat4(clr->main.music_list_selected),state->alpha[2]), 0);
+    draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(ImGui::ColorConvertU32ToFloat4(clr->music_player.music_list_selected),state->alpha[2]), 0);
 
     if (song.texture)
     {
@@ -464,7 +462,7 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
         window->DrawList,
         total.Min,
         total.Max,
-        draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f)),
+        draw->get_clr(clr->music_player.border_color_rect),
         0
     );
     draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(ImVec4(14.f / 255.f, 14.f / 255.f, 14.f / 255.f, 40.f / 100.f)), 0);
@@ -484,7 +482,7 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
         window->DrawList,
         img_zone.Min,
         img_zone.Max,
-        draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f)),
+        draw->get_clr(clr->music_player.border_color_rect),
         0
     );
 // name
@@ -513,20 +511,20 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
 
 //img
 
-    draw->line(window->DrawList, ImVec2(img_zone.Max.x + line_thick / 2.f, img_zone.Min.y), ImVec2(img_zone.Max.x - line_length, img_zone.Min.y), corner_clr, line_thick);
-    draw->line(window->DrawList, ImVec2(img_zone.Max.x, img_zone.Min.y), ImVec2(img_zone.Max.x, img_zone.Min.y + line_length), corner_clr, line_thick);
+    draw->line(window->DrawList, ImVec2(img_zone.Max.x + line_thick / 2.f, img_zone.Min.y), ImVec2(img_zone.Max.x - line_length, img_zone.Min.y), draw->get_clr(clr->music_player.stroke_color), line_thick);
+    draw->line(window->DrawList, ImVec2(img_zone.Max.x, img_zone.Min.y), ImVec2(img_zone.Max.x, img_zone.Min.y + line_length), draw->get_clr(clr->music_player.stroke_color),  line_thick);
 
-    draw->line(window->DrawList, ImVec2(img_zone.Min.x - line_thick / 2.f, img_zone.Max.y), ImVec2(img_zone.Min.x + line_length, img_zone.Max.y), corner_clr, line_thick);
-    draw->line(window->DrawList, ImVec2(img_zone.Min.x, img_zone.Max.y + line_thick / 2.f), ImVec2(img_zone.Min.x, img_zone.Max.y - line_length), corner_clr, line_thick);
+    draw->line(window->DrawList, ImVec2(img_zone.Min.x - line_thick / 2.f, img_zone.Max.y), ImVec2(img_zone.Min.x + line_length, img_zone.Max.y), draw->get_clr(clr->music_player.stroke_color),  line_thick);
+    draw->line(window->DrawList, ImVec2(img_zone.Min.x, img_zone.Max.y + line_thick / 2.f), ImVec2(img_zone.Min.x, img_zone.Max.y - line_length), draw->get_clr(clr->music_player.stroke_color),  line_thick);
 
 
 //total
 
-    draw->line(window->DrawList, total.Min, ImVec2(total.Min.x + line_length, total.Min.y), corner_clr, line_thick);
-    draw->line(window->DrawList, total.Min, ImVec2(total.Min.x, total.Min.y + line_length), corner_clr, line_thick);
+    draw->line(window->DrawList, total.Min, ImVec2(total.Min.x + line_length, total.Min.y), draw->get_clr(clr->music_player.stroke_color),  line_thick);
+    draw->line(window->DrawList, total.Min, ImVec2(total.Min.x, total.Min.y + line_length), draw->get_clr(clr->music_player.stroke_color),  line_thick);
 
-    draw->line(window->DrawList, total.Max, ImVec2(total.Max.x - line_length, total.Max.y), corner_clr, line_thick);
-    draw->line(window->DrawList, total.Max, ImVec2(total.Max.x, total.Max.y - line_length), corner_clr, line_thick);
+    draw->line(window->DrawList, total.Max, ImVec2(total.Max.x - line_length, total.Max.y), draw->get_clr(clr->music_player.stroke_color),  line_thick);
+    draw->line(window->DrawList, total.Max, ImVec2(total.Max.x, total.Max.y - line_length), draw->get_clr(clr->music_player.stroke_color),  line_thick);
 
 // progress
 
@@ -545,10 +543,10 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
         draw->rect_filled(window->DrawList, bar_fill.Min - SCALE(0.f, 2.f), bar_fill.Max + SCALE(0.f, 2.f), draw->get_clr(clr->main.accent, glow_alpha), SCALE(6.f));
     }
 
-    draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.39f) , 1.0f), SCALE(4.f));
+    draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(clr->music_player.border_color_rect, 1.0f), SCALE(4.f));
 
 
-    draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 0.20f)), SCALE(4.f));
+    draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(clr->music_player.border_color_rect), SCALE(4.f));
 
 
     bool bar_hovered = bar_bg.Contains(g.IO.MousePos);
@@ -635,7 +633,7 @@ void c_widgets::background_songs()
         pos,
         pos + ImVec2(window->WorkRect.Max.x - window->WorkRect.Min.x, window->WorkRect.Max.y - window->WorkRect.Min.y)
     );
-    float plank_h = SCALE(81.f);
+    float plank_h = SCALE(81.f); 
     float plank_pad = SCALE(1.f); 
     // плашка сверху
     ImRect top_plank(
