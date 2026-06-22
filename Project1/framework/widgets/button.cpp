@@ -416,17 +416,17 @@ void c_widgets::selection_buttons(std::string_view widgets_id, std::string_view 
     draw->rect_filled(window->DrawList, but_2.Min, but_2.Max, draw->get_clr(clr->main.accent, state->rect_alpha[2]), SCALE(elements->widgets.rounding));
     draw->rect(window->DrawList, but_2.Min, but_2.Max, draw->get_clr(clr->main.text, state->rect_alpha[3]), SCALE(elements->widgets.rounding));
     draw->text_clipped(window->DrawList, font->get(suisse_intl_medium_data, 16), but_2.Min - SCALE(0, 1), but_2.Max - SCALE(elements->selection.padding, 0), draw->get_clr(clr->main.text, state->text_alpha[3]), p2.data(), gui->text_end(p2.data()), NULL, ImVec2(1.f, 0.5f));
-    if (widgets_id == "Language")
-    {
-        draw->image_rounded(window->DrawList, var->gui.flags[0], ImVec2(but_1.Min.x + SCALE(elements->selection.padding), but_1.GetCenter().y - SCALE(elements->selection.img_size.y / 2)), ImVec2(but_1.Min.x + SCALE(elements->selection.padding + elements->selection.img_size.x), but_1.GetCenter().y + SCALE(elements->selection.img_size.y / 2)), ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({ 1.f, 1.f, 1.f, state->text_alpha[1] }), SCALE(elements->version_card.rounding));
-        draw->rect(window->DrawList, ImVec2(but_1.Min.x + SCALE(elements->selection.padding), but_1.GetCenter().y - SCALE(elements->selection.img_size.y / 2)), ImVec2(but_1.Min.x + SCALE(elements->selection.padding + elements->selection.img_size.x), but_1.GetCenter().y + SCALE(elements->selection.img_size.y / 2)), draw->get_clr(clr->main.text, 0.12), SCALE(elements->version_card.rounding), 0, SCALE(1));
+    //if (widgets_id == "Language")
+    //{
+    //    draw->image_rounded(window->DrawList, var->gui.flags[0], ImVec2(but_1.Min.x + SCALE(elements->selection.padding), but_1.GetCenter().y - SCALE(elements->selection.img_size.y / 2)), ImVec2(but_1.Min.x + SCALE(elements->selection.padding + elements->selection.img_size.x), but_1.GetCenter().y + SCALE(elements->selection.img_size.y / 2)), ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({ 1.f, 1.f, 1.f, state->text_alpha[1] }), SCALE(elements->version_card.rounding));
+    //    draw->rect(window->DrawList, ImVec2(but_1.Min.x + SCALE(elements->selection.padding), but_1.GetCenter().y - SCALE(elements->selection.img_size.y / 2)), ImVec2(but_1.Min.x + SCALE(elements->selection.padding + elements->selection.img_size.x), but_1.GetCenter().y + SCALE(elements->selection.img_size.y / 2)), draw->get_clr(clr->main.text, 0.12), SCALE(elements->version_card.rounding), 0, SCALE(1));
 
-        draw->image_rounded(window->DrawList, var->gui.flags[1], ImVec2(but_2.Min.x + SCALE(elements->selection.padding), but_2.GetCenter().y - SCALE(elements->selection.img_size.y / 2)), ImVec2(but_2.Min.x + SCALE(elements->selection.padding + elements->selection.img_size.x), but_2.GetCenter().y + SCALE(elements->selection.img_size.y / 2)), ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({ 1.f, 1.f, 1.f, state->text_alpha[3] }), SCALE(elements->version_card.rounding));
-        draw->rect(window->DrawList, ImVec2(but_2.Min.x + SCALE(elements->selection.padding), but_2.GetCenter().y - SCALE(elements->selection.img_size.y / 2)), ImVec2(but_2.Min.x + SCALE(elements->selection.padding + elements->selection.img_size.x), but_2.GetCenter().y + SCALE(elements->selection.img_size.y / 2)), draw->get_clr(clr->main.text, 0.12), SCALE(elements->version_card.rounding), 0, SCALE(1));
-    }
-    else
-    {
-        draw->text_clipped(window->DrawList, font->get(icons_data, 12), but_1.Min + SCALE(elements->selection.padding, 0), but_1.Max, draw->get_clr(clr->main.text, state->text_alpha[1]), "N", NULL, NULL, ImVec2(0.f, 0.5f));
-        draw->text_clipped(window->DrawList, font->get(icons_data, 12), but_2.Min + SCALE(elements->selection.padding, 0), but_2.Max, draw->get_clr(clr->main.text, state->text_alpha[3]), "M", NULL, NULL, ImVec2(0.f, 0.5f));
-    }
+    //    draw->image_rounded(window->DrawList, var->gui.flags[1], ImVec2(but_2.Min.x + SCALE(elements->selection.padding), but_2.GetCenter().y - SCALE(elements->selection.img_size.y / 2)), ImVec2(but_2.Min.x + SCALE(elements->selection.padding + elements->selection.img_size.x), but_2.GetCenter().y + SCALE(elements->selection.img_size.y / 2)), ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({ 1.f, 1.f, 1.f, state->text_alpha[3] }), SCALE(elements->version_card.rounding));
+    //    draw->rect(window->DrawList, ImVec2(but_2.Min.x + SCALE(elements->selection.padding), but_2.GetCenter().y - SCALE(elements->selection.img_size.y / 2)), ImVec2(but_2.Min.x + SCALE(elements->selection.padding + elements->selection.img_size.x), but_2.GetCenter().y + SCALE(elements->selection.img_size.y / 2)), draw->get_clr(clr->main.text, 0.12), SCALE(elements->version_card.rounding), 0, SCALE(1));
+    //}
+    //else
+    //{
+    //    draw->text_clipped(window->DrawList, font->get(icons_data, 12), but_1.Min + SCALE(elements->selection.padding, 0), but_1.Max, draw->get_clr(clr->main.text, state->text_alpha[1]), "N", NULL, NULL, ImVec2(0.f, 0.5f));
+    //    draw->text_clipped(window->DrawList, font->get(icons_data, 12), but_2.Min + SCALE(elements->selection.padding, 0), but_2.Max, draw->get_clr(clr->main.text, state->text_alpha[3]), "M", NULL, NULL, ImVec2(0.f, 0.5f));
+    //}
 }

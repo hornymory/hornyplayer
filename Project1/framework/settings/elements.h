@@ -42,21 +42,6 @@ public:
 		float padding{ 14 };
 	} textfield;
 
-	struct
-	{
-		ImVec2 rect_size{ 12, 12 };
-		std::vector<std::string> games{ "CS2", "VALORANT", "FORTNITE", "PUBG" };
-		std::vector<std::string> updates{ "Grenade Prediction", "Vanguard Bypass", "Soft Aim", "Anti Recoil" };
-		float zone_padding{ 4 };
-		float padding{ 2 };
-		float rounding{ 4 };
-		float text_zone_height{ 14 };
-	} version_card;
-	struct
-	{
-		float line_weight{ 1 };
-		float speed{ 0.5 };
-	}node_settings;
 
 	struct
 	{
@@ -93,13 +78,6 @@ public:
 		ImVec2 rect_size{ 34, 34 };
 		float text_spacing{ 4 };
 		ImVec2 icon_size{ 12, 14 };
-		std::vector<std::string> fps_games{ "Counter-Strike 2", "Valorant", "Apex Legends" };
-		std::vector<std::string> fps_count{ "12.679", "8.124", "4.398" };
-		std::vector<bool> fps_ready{ true, false, true };
-
-		std::vector<std::string> royale_games{ "Fortnite", "PUBG", "COD Warzone" };
-		std::vector<std::string> royale_count{ "9.681", "7.289", "3.216" };
-		std::vector<bool> royale_ready{ true, false, false };
 	} game_card;
 
 	struct
@@ -155,8 +133,6 @@ public:
 	struct
 	{
 		float pad{ 8.f };
-		Song current_song{};
-		SongsManager manager{};
 	}music_player;
 	struct
 	{

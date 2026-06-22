@@ -57,7 +57,6 @@ void c_gui::render()
 
 				gui->begin_content("music_list", ImVec2(gui->content_avail().x * 0.6f, gui->content_avail().y), SCALE(0, 0), SCALE(elements->window.padding), window_flags_no_scrollbar);
 				{
-					//std::cout << "songs:" << var->gui.manager.songs.size() ;
 					if (var->gui.active_stage == 1)
 					{
 
@@ -66,14 +65,14 @@ void c_gui::render()
 						gui->set_pos(ImVec2(elements->music_player.pad, elements->music_player.pad + 81), pos_all);
 						gui->begin_def_child("songs_scroll", ImVec2(gui->content_avail().x - elements->music_player.pad, gui->content_avail().y - elements->music_player.pad *2), 0, window_flags_no_scrollbar); // window_flags_none или 0
 						{
-							for (auto& song : var->gui.manager.songs)
+							for (auto& song : var->music_player.manager.songs)
 							{
 								if (widgets->song_card(song.name, song))
 								{
-									for (auto& s : var->gui.manager.songs)
+									for (auto& s : var->music_player.manager.songs)
 										s.play = false;
 									song.play = true;
-									elements->music_player.current_song = song;
+									var->music_player.current_song = song;
 								}
 							}
 						}
@@ -86,8 +85,8 @@ void c_gui::render()
 				gui->sameline(0.f,SCALE(elements->window.padding.x/2));
 				gui->begin_content("music_player", ImVec2(gui->content_avail().x, gui->content_avail().y), SCALE(0, 0), SCALE(elements->window.padding), window_flags_no_scroll_with_mouse | window_flags_no_scrollbar);
 				{
-					update_song_progress(var->gui.manager, elements->music_player.current_song);
-					widgets->player("music_player_panel", elements->music_player.current_song);
+					update_song_progress(var->music_player.manager, var->music_player.current_song);
+					widgets->player("music_player_panel", var->music_player.current_song);
 
 				}
 				gui->end_content();
@@ -106,13 +105,11 @@ void c_gui::render()
 		gui->push_var(style_var_alpha, elements->loading.window_alpha);
 		gui->begin_content("back_alpha", SCALE(0, 0), SCALE(0, 0), SCALE(0, 0));
 		{
-			//draw->rect_filled(gui->window_drawlist(), gui->window_pos(), gui->window_pos() + gui->window_size(), draw->get_clr(clr->window.background, 0.6), SCALE(var->window.rounding));
 			gui->loading();
 		}
 		gui->end_content();
 		gui->pop_var();
 
-		//gui->move_window(var->winapi.hwnd, var->winapi.rc);
 	}
 	gui->end();
 

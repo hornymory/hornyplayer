@@ -147,8 +147,6 @@
     <ClCompile Include="framework\helpers\draw.cpp" />
     <ClCompile Include="framework\helpers\emoj.cpp" />
     <ClCompile Include="framework\helpers\fonts.cpp" />
-    <ClCompile Include="framework\helpers\node.cpp" />
-    <ClCompile Include="framework\helpers\player_stub.cpp" />
     <ClCompile Include="framework\helpers\songs.cpp" />
     <ClCompile Include="framework\widgets\button.cpp" />
     <ClCompile Include="framework\widgets\cards.cpp" />
@@ -179,7 +177,6 @@
     <ClInclude Include="framework\headers\fonts.h" />
     <ClInclude Include="framework\headers\functions.h" />
     <ClInclude Include="framework\headers\includes.h" />
-    <ClInclude Include="framework\headers\node.h" />
     <ClInclude Include="framework\headers\songs.h" />
     <ClInclude Include="framework\headers\widgets.h" />
     <ClInclude Include="framework\settings\colors.h" />

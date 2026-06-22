@@ -29,29 +29,6 @@ void c_widgets::info_card(std::string_view widgets_id, std::string_view icon, st
 
 
 
-void c_widgets::version_card(std::string_view widgets_id, std::string_view name, std::string_view update, int img_id)
-{
-    ImGuiWindow* window = GetCurrentWindow();
-    if (window->SkipItems)
-        return;
-
-    ImGuiContext& g = *GImGui;
-    const ImGuiStyle& style = g.Style;
-    const ImGuiID id = window->GetID(widgets_id.data());
-
-    ImVec2 pos = window->DC.CursorPos;
-
-    const ImRect total(pos, pos + ImVec2(gui->content_avail().x, SCALE(elements->version_card.rect_size.y)));
-    const ImRect img_zone(total.Min, total.Min + SCALE(elements->version_card.rect_size));
-    ItemSize(total, style.FramePadding.y);
-    if (!ItemAdd(total, id))
-        return;
-
-    draw->image_rounded(window->DrawList, var->gui.img_for_versions[img_id], img_zone.Min, img_zone.Max, ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({1.f, 1.f, 1.f, 1.f}), SCALE(elements->version_card.rounding));
-    draw->text_clipped(window->DrawList, font->get(suisse_intl_regular_data, 14), ImVec2(img_zone.Max.x + SCALE(elements->version_card.padding), total.Min.y - SCALE(1)), total.Max, draw->get_clr(clr->main.text, 0.48), ("[" + std::string(name) + "]").data(), NULL, NULL, ImVec2(0.f, 0.5f));
-    draw->text_clipped(window->DrawList, font->get(suisse_intl_regular_data, 14), ImVec2(img_zone.Max.x + SCALE(elements->version_card.padding * 2) + gui->text_size(font->get(suisse_intl_regular_data, 14), ("[" + std::string(name) + "]").data()).x, total.Min.y - SCALE(1)), total.Max, draw->get_clr(clr->main.text, 0.72), update.data(), NULL, NULL, ImVec2(0.f, 0.5f));
-
-};
 
 void c_widgets::top_bar(std::string_view url, std::string_view text, std::string_view date)
 {
@@ -276,7 +253,7 @@ bool c_widgets::song_card(std::string_view widgets_id, Song& song)
         // ================================
         //song.play = !song.play;
 
-        ma_result res = play_song(var->gui.manager, song);
+        ma_result res = play_song(var->music_player.manager, song);
         
     }
 
@@ -583,7 +560,7 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
         float bar_width = bar_bg.Max.x - bar_bg.Min.x;
         float click_percent = ImClamp(click_x / bar_width, 0.f, 1.f);
 
-        seek_song(var->gui.manager, song, click_percent);     
+        seek_song(var->music_player.manager, song, click_percent);     
     }
 
     // ============ play/pause button ============
@@ -600,7 +577,7 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
     bool play_hovered = play_btn.Contains(g.IO.MousePos);
     bool play_clicked = play_hovered && g.IO.MouseClicked[0];
 
-    bool is_playing = ma_sound_is_playing(&var->gui.manager.current_sound);
+    bool is_playing = ma_sound_is_playing(&var->music_player.manager.current_sound);
 
     draw->rect_filled(window->DrawList, play_btn.Min, play_btn.Max, draw->get_clr(clr->main.text, play_hovered ? 0.15f : 0.08f), SCALE(8.f));
 
@@ -615,7 +592,7 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
     );
 
     if (play_clicked)
-        pause_song(var->gui.manager);
+        pause_song(var->music_player.manager);
 
     // ============ volume slider ============
 
@@ -632,13 +609,13 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
     if (vol_hovered && (ImGui::IsMouseClicked(0) || ImGui::IsMouseDragging(0)))
     {
         float x = ImClamp(g.IO.MousePos.x - vol_bar.Min.x, 0.f, vol_width);
-        var->gui.manager.volume = x / vol_width;
-        set_volume(var->gui.manager, var->gui.manager.volume);
+        var->music_player.manager.volume = x / vol_width;
+        set_volume(var->music_player.manager, var->music_player.manager.volume);
     }
 
     draw->rect_filled(window->DrawList, vol_bar.Min, vol_bar.Max, draw->get_clr(clr->main.text, 0.1f), SCALE(2.f));
 
-    ImVec2 vol_fill_max(vol_bar.Min.x + vol_width * var->gui.manager.volume, vol_bar.Max.y);
+    ImVec2 vol_fill_max(vol_bar.Min.x + vol_width * var->music_player.manager.volume, vol_bar.Max.y);
     draw->rect_filled(window->DrawList, vol_bar.Min, vol_fill_max, draw->get_clr(ImVec4(1.0f, 0.176f, 0.49f, 1.0f)), SCALE(2.f));
 
 
@@ -659,17 +636,12 @@ void c_widgets::background_songs()
         pos + ImVec2(window->WorkRect.Max.x - window->WorkRect.Min.x, window->WorkRect.Max.y - window->WorkRect.Min.y)
     );
     float plank_h = SCALE(81.f);
-    float plank_pad = SCALE(1.f); // чуть уже
-
+    float plank_pad = SCALE(1.f); 
     // плашка сверху
     ImRect top_plank(
         ImVec2(total.Min.x + plank_pad, total.Min.y),
         ImVec2(total.Max.x - plank_pad, total.Min.y + plank_h)
     );
-
-    //window->DrawList->PushClipRect(total.Min, total.Max, true);
-    //draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context, SCALE(elements->widgets.rounding), 1);
-    //window->DrawList->PopClipRect();
 
     draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(ImVec4(14.f / 255.f, 14.f / 255.f, 14.f / 255.f, 40.f / 100.f)), 0);
 

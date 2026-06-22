@@ -118,6 +118,11 @@ public:
 		float scroll_bar_rounding{ 100 };
 		window_flags flags{ window_flags_no_saved_settings | window_flags_no_nav | window_flags_no_decoration | window_flags_no_scrollbar | window_flags_no_scroll_with_mouse | window_flags_no_background };
 	} window;
+	struct
+	{
+		Song current_song{};
+		SongsManager manager{};
+	}music_player;
 
 	struct
 	{
@@ -145,16 +150,8 @@ public:
 
 		bool loading = false;
 
-		c_video_player cs_player;
-		c_video_player apex_player;
-		c_video_player fortnite_player;
-
 		ID3D11ShaderResourceView* background{ nullptr };
 
-		ID3D11ShaderResourceView* decoration[2]{};
-		ID3D11ShaderResourceView* img_for_versions[5]{};
-		ID3D11ShaderResourceView* games[6]{};
-		ID3D11ShaderResourceView* flags[2]{};
 		bool resizing{ false };
 		float resize_fade{ 0.30f };
 

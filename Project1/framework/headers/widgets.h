@@ -34,7 +34,6 @@ public:
     //bool game_card(std::string_view widgets_id, std::string_view name, std::string_view count, int img_id, bool ready = true);
     bool song_card(std::string_view widgets_id, Song& song);
 
-    void product_page(c_video_player& player, int img_id, std::string_view name, std::string_view desc, std::string_view launches, std::string_view updated, std::string_view status, std::string_view online);
 
     bool back_button();
 

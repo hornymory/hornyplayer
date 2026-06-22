@@ -47,7 +47,6 @@ int main(int, char**)
     int w = (int)(var->window.size.x * main_scale), h = (int)(var->window.size.y * main_scale);
     int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
     int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
-    //HWND hwnd = ::CreateWindowW(wc.lpszClassName, L"Project1", WS_OVERLAPPEDWINDOW, 100, 100, (int)(1280 * main_scale), (int)(800 * main_scale), nullptr, nullptr, wc.hInstance, nullptr);
     HWND hwnd = ::CreateWindowExW(
         WS_EX_LAYERED,
         wc.lpszClassName,
@@ -93,12 +92,11 @@ int main(int, char**)
     DwmExtendFrameIntoClientArea(hwnd, &margins);
 
 
-    //ImVec4 clear_color = ImVec4(0.06f, 0.07f, 0.09f, 1.00f);
     ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-    var->gui.manager.music_path = L"C:/Users/hornymory/Music";
-    load_songs(var->gui.manager);
+    var->music_player.manager.music_path = L"C:/Users/hornymory/Music";
+    load_songs(var->music_player.manager);
 
-    for (auto& song : var->gui.manager.songs)
+    for (auto& song : var->music_player.manager.songs)
     {
         EnsureSongTextureCreated(
             song,
@@ -106,12 +104,11 @@ int main(int, char**)
         );
     }
     bool done = false;
-    init_audio(var->gui.manager);
+    init_audio(var->music_player.manager);
 
     
     while (!done)
     {
-        //static auto lastFrame = std::chrono::steady_clock::now();
         MSG msg;
         while (::PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
         {
@@ -139,7 +136,6 @@ int main(int, char**)
         if (g_ResizeWidth != 0 && g_ResizeHeight != 0)
         {
             CleanupRenderTarget();
-            //release_blur_resources();
             g_pSwapChain->ResizeBuffers(0, g_ResizeWidth, g_ResizeHeight, DXGI_FORMAT_UNKNOWN, 0);
             g_ResizeWidth = g_ResizeHeight = 0;
             CreateRenderTarget();
@@ -165,17 +161,6 @@ int main(int, char**)
         HRESULT hr = g_pSwapChain->Present(1, 0);
         g_SwapChainOccluded = (hr == DXGI_STATUS_OCCLUDED);
 
-        //constexpr auto targetFrameTime = std::chrono::milliseconds(11); // ~60 FPS
-
-        //auto now = std::chrono::steady_clock::now();
-        //auto elapsed = now - lastFrame;
-
-        //if (elapsed < targetFrameTime)
-        //{
-        //    std::this_thread::sleep_for(targetFrameTime - elapsed);
-        //}
-
-        //lastFrame = std::chrono::steady_clock::now();
 
     }
 
@@ -201,7 +186,6 @@ bool CreateDeviceD3D(HWND hWnd)
     sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     sd.BufferDesc.RefreshRate.Numerator = 60;
     sd.BufferDesc.RefreshRate.Denominator = 1;
-    //sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
     sd.OutputWindow = hWnd;
     sd.SampleDesc.Count = 1;

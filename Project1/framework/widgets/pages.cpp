@@ -56,10 +56,10 @@ void c_widgets::log_reg_page()
 					
 
 
-				if (!var->gui.registration && (var->gui.username == username && var->gui.password == password) && var->gui.registered)
-					var->gui.stage_count = 1;
-				if (var->gui.registration && email[0] != '\0' &&   username[0] != '\0' && password[0] != '\0' && var->gui.registered)
-					var->gui.stage_count = 1;
+				//if (!var->gui.registration && (var->gui.username == username && var->gui.password == password) && var->gui.registered)
+				//	var->gui.stage_count = 1;
+				//if (var->gui.registration && email[0] != '\0' &&   username[0] != '\0' && password[0] != '\0' && var->gui.registered)
+				//	var->gui.stage_count = 1;
 			}
 			gui->end_content();
 
@@ -74,65 +74,5 @@ void c_widgets::log_reg_page()
 	}
 	gui->end_content();
 
-
-};
-
-void c_widgets::product_page(c_video_player& player, int img_id, std::string_view name, std::string_view desc, std::string_view launches, std::string_view updated, std::string_view status, std::string_view online)
-{
-	gui->begin_content("product_desc_content", ImVec2(gui->content_max().x - SCALE(elements->player.size.x + elements->window.padding.x), gui->content_avail().y), SCALE(0, 0), SCALE(elements->widgets.spacing), window_flags_no_scrollbar | window_flags_no_scroll_with_mouse);
-	{
-		ImGuiContext& g = *GImGui;
-		widgets->back_button();
-
-		const ImRect game_rect(ImVec2(g.LastItemData.Rect.Min.x, g.LastItemData.Rect.Max.y + SCALE(elements->widgets.spacing.y)), ImVec2(g.LastItemData.Rect.Min.x + gui->content_avail().x, g.LastItemData.Rect.Max.y + SCALE(elements->widgets.spacing.y + elements->product_page.game_zone_height)));
-		const ImRect desc_rect(ImVec2(game_rect.Min.x, game_rect.Max.y + SCALE(elements->product_page.back_button_padding)), gui->window_pos() + gui->window_size() - SCALE(0, elements->widgets.spacing.y * 2 + elements->info_card.height * 2));
-
-		draw->image_rounded(gui->window_drawlist(), var->gui.img_for_versions[img_id], ImVec2(game_rect.Min.x, game_rect.GetCenter().y - SCALE(elements->product_page.img_size.y / 2)), ImVec2(game_rect.Min.x + SCALE(elements->product_page.img_size.x), game_rect.GetCenter().y + SCALE(elements->product_page.img_size.y / 2)), ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({1.f, 1.f, 1.f, 1.f}), SCALE(elements->version_card.rounding));
-	
-		draw->text_clipped(gui->window_drawlist(), font->get(suisse_intl_medium_data, 19), game_rect.Min + SCALE(elements->product_page.img_size.x + elements->product_page.back_button_padding, 0), game_rect.Max, draw->get_clr(clr->main.text), name.data(), gui->text_end(name.data()), NULL, ImVec2(0.f, 0.5f));
-	
-		std::vector<std::string> lines = gui->wrap_text(font->get(suisse_intl_medium_data, 13), gui->content_avail().x, std::string(desc));
-
-		ImVec2 desc_pos = desc_rect.Min;
-		for (const auto& line : lines)
-		{
-			draw->text_clipped(gui->window_drawlist(), font->get(suisse_intl_medium_data, 13), desc_pos, desc_rect.Max, draw->get_clr(clr->main.text, 0.48), line.c_str());
-			desc_pos.y += gui->text_size(font->get(suisse_intl_medium_data, 13), "A").y;
-		}
-
-		gui->set_screen_pos(ImVec2(desc_rect.Min.x, desc_rect.Max.y + SCALE(elements->widgets.spacing.y)), pos_all);
-		gui->begin_group();
-		{
-			widgets->info_card("launches_2_id", "E", gui->language("Launches", "Запущено"), "12.679", (gui->window_size().x - SCALE(elements->widgets.spacing.x)) / 2);
-			gui->sameline();
-			widgets->info_card("updated_2_id", "W", gui->language("Updated", "Обновлено"), "22.07.25", (gui->window_size().x - SCALE(elements->widgets.spacing.x)) / 2);
-		}
-		gui->end_group();
-		gui->begin_group();
-		{
-			widgets->info_card("status_2_id", "b", gui->language("Status", "Статус"), gui->language("Undetected", "Незамечен"), (gui->window_size().x - SCALE(elements->widgets.spacing.x)) / 2);
-			gui->sameline();
-			widgets->info_card("online_2_id", "a", gui->language("Online", "Онлайн"), "146", (gui->window_size().x - SCALE(elements->widgets.spacing.x)) / 2);
-		}
-		gui->end_group();
-	}
-	gui->end_content();
-	gui->sameline();
-	gui->begin_content("player_content", ImVec2(SCALE(elements->player.size.x), gui->content_avail().y), SCALE(0, 0), SCALE(elements->widgets.spacing), window_flags_no_scrollbar | window_flags_no_scroll_with_mouse);
-	{
-		ImVec2 right_pos = gui->window_pos();
-		ImVec2 right_size = gui->window_size();
-		ImVec2 right = ImVec2(right_pos.x + right_size.x, right_pos.y + SCALE(260.f));
-
-		draw->image_rounded(gui->window_drawlist(), var->gui.games[img_id], right_pos, right, ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({ 1.f,1.f,1.f,1.f }), SCALE(elements->widgets.rounding));
-
-		draw->rect(gui->window_drawlist(), right_pos, right, draw->get_clr(clr->main.text, 0.06f),SCALE(elements->widgets.rounding));
-		gui->set_screen_pos(ImVec2(right_pos.x, right_pos.y + right_size.y - SCALE((elements->textfield.size.y + 8.f) * 2 + elements->widgets.spacing.y)),pos_all);
-		if (widgets->launch_button())
-			var->gui.loading = true;
-		widgets->update_button();
-
-	}
-	gui->end_content();
 
 };

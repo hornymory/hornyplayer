@@ -1,6 +1,5 @@
 #include "../headers/functions.h"
 #include "../headers/widgets.h"
-#include "../headers/node.h"
 #include"../headers/emoj.h"
 #include <stb_image.h>
 #include"../data/images.h"

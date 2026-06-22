@@ -72,9 +72,6 @@
     <ClCompile Include="framework\widgets\checkbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="framework\helpers\player_stub.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="framework\helpers\fonts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -82,9 +79,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="framework\helpers\blur.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="framework\helpers\node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="framework\helpers\songs.cpp">
@@ -1026,9 +1020,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="thirdparty\portaudio\inc\portaudio.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="framework\headers\node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="framework\headers\songs.h">
