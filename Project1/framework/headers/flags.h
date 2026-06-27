@@ -342,7 +342,7 @@ inline gui_style::gui_style()
 
     colors[style_col_text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
     colors[style_col_text_disabled] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
-    colors[style_col_window_bg] = ImVec4(0.06f, 0.06f, 0.06f, 0.94f);
+    colors[style_col_window_bg] = ImVec4(0.06f, 0.06f, 0.06f, 0.00f);
     colors[style_col_child_bg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     colors[style_col_popup_bg] = ImVec4(0.08f, 0.08f, 0.08f, 0.94f);
     colors[style_col_border] = ImVec4(0.43f, 0.43f, 0.50f, 0.50f);

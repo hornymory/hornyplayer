@@ -45,3 +45,5 @@ void update_song_progress(SongsManager& manager, Song& song);
 void seek_song(SongsManager& manager, Song& song, float percent);
 void pause_song(SongsManager& manager);
 void set_volume(SongsManager& manager, float volume);
+void set_loop(SongsManager& manager, bool loop);
+

@@ -48,16 +48,26 @@ int main(int, char**)
     int x = (GetSystemMetrics(SM_CXSCREEN) - w) / 2;
     int y = (GetSystemMetrics(SM_CYSCREEN) - h) / 2;
     HWND hwnd = ::CreateWindowExW(
-        WS_EX_LAYERED,
+        0,
         wc.lpszClassName,
         L"Project3",
-        WS_POPUP,
+        //WS_POPUP,
+        WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
         x, y,
         w, h,
         nullptr, nullptr, wc.hInstance, nullptr
     );
 
-    SetLayeredWindowAttributes(hwnd, 0, 255, LWA_ALPHA);
+    BOOL dark = TRUE;
+    DwmSetWindowAttribute(
+        hwnd,
+        DWMWA_USE_IMMERSIVE_DARK_MODE,
+        &dark,
+        sizeof(dark)
+    );
+
+
+    //SetLayeredWindowAttributes(hwnd, 0, 255, LWA_ALPHA);
     if (!CreateDeviceD3D(hwnd))
     {
         CleanupDeviceD3D();
@@ -88,8 +98,8 @@ int main(int, char**)
     var->winapi.swap_chain = g_pSwapChain;
     var->gui.dpi_changed = true;
 
-    MARGINS margins = { -1 };
-    DwmExtendFrameIntoClientArea(hwnd, &margins);
+    //MARGINS margins = { -1 };
+    //DwmExtendFrameIntoClientArea(hwnd, &margins);
 
 
     ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);

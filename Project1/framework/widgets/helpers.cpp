@@ -22,10 +22,12 @@ void c_gui::pop_color(int count)
         count--;
     }
 }
-void c_gui::draw_background() 
-{
-    ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
+void c_gui::draw_decorations()
+{
+    const ImVec2 pos = gui->window_pos();
+    const ImVec2 size = gui->window_size();
+    ImDrawList* drawlist = gui->window_drawlist();
     ImGuiWindow* window = ImGui::GetCurrentWindow();
 
     ImRect area(
@@ -36,20 +38,56 @@ void c_gui::draw_background()
         )
     );
 
-
-    draw->image(draw_list, var->gui.background, area.Min, area.Max);
+    draw->image_rounded(drawlist, var->gui.background, area.Min, area.Max, ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({ 1.f, 1.f, 1.f, 1.f }), var->window.rounding);
 
     draw_text_snow(
-        draw_list,
+        drawlist,
         area,
         elements->background.symbols,
         clr->window.particle_color,
         elements->background.count,
         (float)ImGui::GetTime()
     );
-    window->DrawList->PushClipRect(ImVec2(area.Min.x + SCALE(9.f),area.Min.y), ImVec2(area.Max.x - SCALE(9.f), area.Max.y), true);
-    draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context, SCALE(elements->widgets.rounding), 1);
-    window->DrawList->PopClipRect();
+
+    draw->push_clip_rect(drawlist, area.Min, area.Max);
+    draw_background_blur(window->DrawList, var->winapi.device_dx11,var->winapi.device_context, SCALE(elements->widgets.rounding), 1);
+    draw->pop_clip_rect(drawlist);
+}
+
+void c_gui::draw_background() 
+{
+    //ImDrawList* draw_list = ImGui::GetWindowDrawList();
+
+    //ImGuiWindow* window = ImGui::GetCurrentWindow();
+
+    //ImRect area(
+    //    window->Pos,
+    //    ImVec2(
+    //        window->Pos.x + window->Size.x,
+    //        window->Pos.y + window->Size.y
+    //    )
+    //);
+
+
+    //draw->image_rounded(draw_list, var->gui.background, area.Min, area.Max,ImVec2(0, 0),ImVec2(1, 1),draw->get_clr({ 1.f, 1.f, 1.f, 1.f }) ,var->window.rounding);
+
+    //draw_text_snow(
+    //    draw_list,
+    //    area,
+    //    elements->background.symbols,
+    //    clr->window.particle_color,
+    //    elements->background.count,
+    //    (float)ImGui::GetTime()
+    //);
+    //float r = SCALE(var->window.rounding);
+    //window->DrawList->PushClipRect(
+    //    ImVec2(area.Min.x + r, area.Min.y + r),
+    //    ImVec2(area.Max.x - r, area.Max.y - r),
+    //    true
+    //);
+    //draw_background_blur(window->DrawList, var->winapi.device_dx11,
+    //    var->winapi.device_context, SCALE(elements->widgets.rounding), 1);
+    //window->DrawList->PopClipRect();
 }
 
 
@@ -1523,25 +1561,27 @@ void c_gui::loading()
 void c_gui::set_style()
 {
     auto* style = &var->style; 
-
+    style->colors[style_col_window_bg] = ImVec4(0, 0, 0, 0);
     style->window_border_size = SCALE(var->window.border_size);
     style->window_rounding = SCALE(var->window.rounding);
     style->scrollbar_size = SCALE(var->window.scroll_bar_width);
     style->scrollbar_rounding = SCALE(var->window.scroll_bar_rounding);
     style->scrollbar_border_padding = SCALE(2, 0);
     style->scrollbar_content_padding = SCALE(elements->window.padding.x - 1);
+    
+
 }
 
-void c_gui::draw_decorations()
-{
-    const ImVec2 pos = gui->window_pos();
-    const ImVec2 size = gui->window_size();
-    ImDrawList* drawlist = gui->window_drawlist();
-
-    //draw->rect_filled(drawlist, pos + SCALE(1, 1), pos + size - SCALE(1, 1), draw->get_clr(clr->window.background), var->style.window_rounding);
-    draw->rect(drawlist, pos + SCALE(1, 1), pos + size - SCALE(1, 1), draw->get_clr(clr->main.text, 0.04), var->style.window_rounding, SCALE(1));
-    //draw->image_rounded(drawlist, var->gui.menu_background, pos + SCALE(1, 1), pos + size - SCALE(1, 1), ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({ 1.f, 1.f, 1.f, 1.f }), var->style.window_rounding);
-}
+//void c_gui::draw_decorations()
+//{
+//    const ImVec2 pos = gui->window_pos();
+//    const ImVec2 size = gui->window_size();
+//    ImDrawList* drawlist = gui->window_drawlist();
+//
+//    //draw->rect_filled(drawlist, pos + SCALE(1, 1), pos + size - SCALE(1, 1), draw->get_clr(clr->window.background), var->style.window_rounding);
+//    draw->rect(drawlist, pos + SCALE(1, 1), pos + size - SCALE(1, 1), draw->get_clr(clr->main.text, 0.04), var->style.window_rounding, SCALE(1));
+//    //draw->image_rounded(drawlist, var->gui.menu_background, pos + SCALE(1, 1), pos + size - SCALE(1, 1), ImVec2(0, 0), ImVec2(1, 1), draw->get_clr({ 1.f, 1.f, 1.f, 1.f }), var->style.window_rounding);
+//}
 
 void c_gui::initialize()
 {

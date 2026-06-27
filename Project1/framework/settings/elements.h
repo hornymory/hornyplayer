@@ -79,7 +79,12 @@ public:
 		float text_spacing{ 4 };
 		ImVec2 icon_size{ 12, 14 };
 	} game_card;
+	struct
+	{
+		float img_rounding{ 8 };
+		float hovered_rounding{ 5 };
 
+	} song_card;
 	struct
 	{
 		ImVec2 size{ 462, 260 };
@@ -127,12 +132,13 @@ public:
 
 	struct
 	{
-		std::vector<std::string> symbols{ "1","0"};
+		std::vector<std::string> symbols{ "0"};
 		int count{ 15 };
 	}background;
 	struct
 	{
 		float pad{ 8.f };
+		float background_rounding{ 12.f };
 	}music_player;
 	struct
 	{

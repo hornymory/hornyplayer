@@ -252,3 +252,7 @@ void set_volume(SongsManager& manager, float volume)
     volume = ImClamp(volume, 0.f, 1.f);
     ma_sound_set_volume(&manager.current_sound, volume);
 }
+void set_loop(SongsManager& manager, bool loop)
+{
+    ma_sound_set_looping(&manager.current_sound, loop);
+}

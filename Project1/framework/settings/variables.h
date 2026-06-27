@@ -112,7 +112,7 @@ public:
 	struct
 	{
 		ImVec2 size{ 1200, 800 };
-		float rounding{ 0 };
+		float rounding{ 12 };
 		float border_size{ 1 };
 		float scroll_bar_width{ 4 };
 		float scroll_bar_rounding{ 100 };
