@@ -362,6 +362,7 @@ void c_widgets::music_buttons(std::string_view widgets_id)
         float volume{ 1.f };
         bool is_playing{ false };
         float play_alpha{ 1.f };
+        bool mute;
     };
 
     ImGuiWindow* window = gui->get_window();
@@ -390,7 +391,7 @@ void c_widgets::music_buttons(std::string_view widgets_id)
 
     float center_y = total.Min.y + total.GetHeight() * 0.5f;
     float main_btn_y = center_y - btn * 0.5f;
-    float side_y = center_y - side_btn * 0.5f; // Убрал лишнее смещение + SCALE(3.f), чтобы было ровно по центру
+    float side_y = center_y - side_btn * 0.5f; 
 
     float group_w = btn * 3 + gap * 2;
     float start = total.Min.x + (total.GetWidth() - group_w) * 0.5f;
@@ -417,30 +418,49 @@ void c_widgets::music_buttons(std::string_view widgets_id)
         { total.Max.x - SCALE(12.f),            side_y + side_btn }
     );
 
-    // Исправление 2: Изменил -= на +=, чтобы скролл колесиком вверх прибавлял звук
     if (ImGui::IsMouseHoveringRect(volume_btn.Min, volume_btn.Max, false))
     {
-        if (ImGui::IsMouseClicked(ImGui::GetIO().MouseDown[0]))
+        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left))
         {
-            state->volume = 0;
+            state->mute = !state->mute;
         }
-        state->volume += g.IO.MouseWheel * 0.05f;
-        state->volume = ImClamp(state->volume, 0.f, 1.f);
-        ma_engine_set_volume(&var->music_player.manager.engine, state->volume);
+
+        if (g.IO.MouseWheel != 0.0f)
+        {
+            state->volume += g.IO.MouseWheel * 0.05f;
+            state->volume = ImClamp(state->volume, 0.f, 1.f);
+
+            if (g.IO.MouseWheel > 0.0f && state->volume > 0.0f) {
+                state->mute = false;
+            }
+        }
+
+        if (state->mute)
+        {
+            ma_engine_set_volume(&var->music_player.manager.engine, 0.f);
+        }
+        else
+        {
+            ma_engine_set_volume(&var->music_player.manager.engine, state->volume);
+        }
     }
     
 
     // volume icon
 
-    if (state->volume <= 0.f)
-        draw->text_clipped(window->DrawList, font->get(icons_data, 16), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "0", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
-    else if (state->volume < 0.33f)
-        draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "1", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
-    else if (state->volume < 0.66f)
-        draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "2", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+if (state->mute || state->volume <= 0.0f)
+{
+    draw->text_clipped(window->DrawList, font->get(icons_data, 16), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "H", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+}
     else
-        draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "3", nullptr, nullptr, ImVec2(0.8f, 0.5f), nullptr);
-
+    {
+        if (state->volume < 0.33f)
+            draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "1", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+        else if (state->volume < 0.66f)
+            draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "2", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+        else
+            draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "3", nullptr, nullptr, ImVec2(0.8f, 0.5f), nullptr);
+    }
     if (ImGui::IsMouseHoveringRect(volume_btn.Min, volume_btn.Max, false))
     {
         ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);

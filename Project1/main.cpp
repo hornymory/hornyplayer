@@ -277,7 +277,7 @@ void CleanupRenderTarget()
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+//extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -289,11 +289,29 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_SIZE:
         g_minimized = (wParam == SIZE_MINIMIZED);
 
-        if (wParam != SIZE_MINIMIZED)
+        //if (wParam != SIZE_MINIMIZED)
+        //{
+        //    g_ResizeWidth = (UINT)LOWORD(lParam);
+        //    g_ResizeHeight = (UINT)HIWORD(lParam);
+        //}
+
+        if (wParam == SIZE_MINIMIZED)
+        {
+            if (ImGui::GetCurrentContext() != nullptr)
+            {
+                ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+
+                ImGui::ClearActiveID();
+            }
+
+            ::SetCursor(::LoadCursor(nullptr, IDC_ARROW));
+        }
+        else
         {
             g_ResizeWidth = (UINT)LOWORD(lParam);
             g_ResizeHeight = (UINT)HIWORD(lParam);
         }
+        return 0;
         return 0;
 
     case WM_SHOWWINDOW:
