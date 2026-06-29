@@ -18,6 +18,7 @@ struct Song
 	bool play{ false };
 	float current_time{ 0.f };
 	float full_time{ 0.f };
+	bool repeat{ false };
 };
 
 
@@ -32,7 +33,6 @@ struct SongsManager
 	bool engine_initialized{ false };
 	bool sound_loaded{ false };
 	float volume{ 0.5f };
-
 
 };
 

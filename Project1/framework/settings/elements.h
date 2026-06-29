@@ -34,6 +34,11 @@ public:
 		float rounding{ 8 };
 		ImVec2 spacing{ 8, 8 };
 	} widgets;
+	struct
+	{
+		ImVec2 size = ImVec2(100, 50);
+		
+	}music_buttons;
 
 	struct
 	{
@@ -139,6 +144,7 @@ public:
 	{
 		float pad{ 8.f };
 		float background_rounding{ 12.f };
+
 	}music_player;
 	struct
 	{

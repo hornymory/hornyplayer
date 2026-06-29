@@ -197,14 +197,17 @@ ma_result play_song(SongsManager& manager, Song& song)
 
     if (res == MA_SUCCESS)
     {
-        ma_sound_start(&manager.current_sound);
         manager.sound_loaded = true;
-        ma_sound_set_volume(&manager.current_sound, manager.volume);
 
-        ma_uint64 lenght_frames = 0;
-        ma_sound_get_length_in_pcm_frames(&manager.current_sound, &lenght_frames);
+        ma_sound_set_volume(&manager.current_sound, manager.volume);
+        ma_sound_set_looping(&manager.current_sound, song.repeat); // <-- добавить
+
+        ma_sound_start(&manager.current_sound);
+
+        ma_uint64 length_frames = 0;
+        ma_sound_get_length_in_pcm_frames(&manager.current_sound, &length_frames);
         ma_uint32 sample_rate = ma_engine_get_sample_rate(&manager.engine);
-        song.full_time = (float)lenght_frames / sample_rate;
+        song.full_time = (float)length_frames / sample_rate;
     }
 
     return res; // обязательно добавь
@@ -254,5 +257,8 @@ void set_volume(SongsManager& manager, float volume)
 }
 void set_loop(SongsManager& manager, bool loop)
 {
+    if (!manager.sound_loaded)
+        return;
+
     ma_sound_set_looping(&manager.current_sound, loop);
 }

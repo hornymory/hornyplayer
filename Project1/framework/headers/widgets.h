@@ -49,7 +49,9 @@ public:
 
     void selection_buttons(std::string_view widgets_id, std::string_view name, std::string_view p1, std::string_view p2, int& variable);
 
-    void background_songs();
+    void background_songs(std::string_view widgets_id);
+    
+    void music_buttons(std::string_view widgets_id);
 
 
 

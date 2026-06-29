@@ -7,7 +7,7 @@
 #include <tchar.h>
 
 #include"framework/headers/songs.h"
-
+#include <dxgi.h> 
 #include <dwmapi.h>
 #pragma comment(lib, "dwmapi.lib")
 
@@ -81,8 +81,8 @@ int main(int, char**)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
@@ -202,7 +202,7 @@ bool CreateDeviceD3D(HWND hWnd)
     sd.SampleDesc.Quality = 0;
     sd.Windowed = TRUE;
 
-    sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
+    //sd.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
     sd.Flags = 0;
 
     UINT createDeviceFlags = 0;

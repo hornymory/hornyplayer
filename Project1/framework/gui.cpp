@@ -40,12 +40,12 @@ void c_gui::render()
 			var->gui.active_section = var->gui.section_count;
 
 		gui->set_pos(SCALE(0, 0), pos_all);
-		gui->begin_content("content", ImVec2(gui->window_size().x, gui->window_size().y - (SCALE(elements->window.padding.y)*2)), SCALE(elements->window.padding), SCALE(elements->widgets.spacing.x, elements->window.padding.y), window_flags_no_scroll_with_mouse | window_flags_no_scrollbar);
+		gui->begin_content("content", ImVec2(gui->window_size().x, gui->window_size().y - (SCALE(elements->window.padding.y) * 2)), SCALE(elements->window.padding), SCALE(elements->widgets.spacing.x, elements->window.padding.y), window_flags_no_scroll_with_mouse | window_flags_no_scrollbar);
 		{
-			
+
 			gui->push_var(style_var_alpha, var->gui.content_alpha * var->gui.stage_alpha);
 			//gui->dummy(ImVec2(0,elements->top_bar.padding.y));
-			if(var->gui.active_section == 0)
+			if (var->gui.active_section == 0)
 			{
 				Song play_song = {};
 
@@ -55,8 +55,8 @@ void c_gui::render()
 					{
 
 
-						widgets->background_songs();
-						gui->begin_def_child("songs_scroll", ImVec2(gui->content_avail().x - elements->music_player.pad, gui->content_avail().y - elements->music_player.pad *2), 0, window_flags_no_scrollbar); // window_flags_none или 0
+						widgets->background_songs("back_songs");
+						gui->begin_def_child("songs_scroll", ImVec2(gui->content_avail().x - elements->music_player.pad, gui->content_avail().y - elements->music_player.pad * 2), 0, window_flags_no_scrollbar); // window_flags_none или 0
 						{
 							for (auto& song : var->music_player.manager.songs)
 							{
@@ -75,8 +75,8 @@ void c_gui::render()
 
 				}
 				gui->end_content();
-				gui->sameline(0.f,SCALE(elements->window.padding.x/2));
-				gui->begin_content("music_player", ImVec2(gui->content_avail().x - elements->music_player.pad*2, gui->content_avail().y), SCALE(0, 0), SCALE(elements->window.padding), window_flags_no_scroll_with_mouse | window_flags_no_scrollbar);
+				gui->sameline(0.f, SCALE(elements->window.padding.x / 2));
+				gui->begin_content("music_player", ImVec2(gui->content_avail().x - elements->music_player.pad * 2, gui->content_avail().y), SCALE(0, 0), SCALE(elements->window.padding), window_flags_no_scroll_with_mouse | window_flags_no_scrollbar);
 				{
 					update_song_progress(var->music_player.manager, var->music_player.current_song);
 					widgets->player("music_player_panel", var->music_player.current_song);

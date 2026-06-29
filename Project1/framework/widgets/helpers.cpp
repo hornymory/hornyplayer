@@ -299,6 +299,7 @@ void c_gui::end_group()
 void c_gui::begin_content(std::string_view id, const ImVec2& size, const ImVec2& padding, const ImVec2& spacing, window_flags flags)
 {
     gui->push_var(ImGuiStyleVar_WindowPadding, padding);
+    gui->push_var(ImGuiStyleVar_ChildBorderSize, 0.f);
     gui->begin_def_child(id, size, child_flags_none, flags | window_flags_always_use_window_padding | window_flags_no_saved_settings | window_flags_no_focus_on_appearing);
     gui->push_var(ImGuiStyleVar_ItemSpacing, spacing);
 
@@ -306,6 +307,7 @@ void c_gui::begin_content(std::string_view id, const ImVec2& size, const ImVec2&
 
 void c_gui::end_content()
 {
+    gui->pop_var();
     gui->pop_var();
     gui->end_def_child();
     gui->pop_var();
@@ -1625,4 +1627,5 @@ void c_gui::initialize()
             stbi_image_free(pixels);
         }
     }
-}
+
+   }

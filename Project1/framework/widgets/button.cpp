@@ -353,6 +353,166 @@ bool c_widgets::update_button()
     return state->clicked;
 }
 
+void c_widgets::music_buttons(std::string_view widgets_id)
+{
+    struct music_buttons_state
+    {
+        bool loop{ false };
+        float repeat_alpha{ 0.4f };
+        float volume{ 1.f };
+        bool is_playing{ false };
+        float play_alpha{ 1.f };
+    };
+
+    ImGuiWindow* window = gui->get_window();
+    if (window->SkipItems) return;
+
+    ImGuiContext& g = *GImGui;
+    const ImGuiID id = window->GetID(widgets_id.data());
+
+    const ImVec2 pos = window->DC.CursorPos;
+
+    float available_w = window->WorkRect.Max.x - pos.x - SCALE(20.f);
+
+    const ImRect total(
+        pos,
+        pos + ImVec2(available_w, SCALE(60.f))
+    );
+
+    gui->item_size(total, g.Style.FramePadding.y);
+    if (!gui->item_add(total, id)) return;
+
+    music_buttons_state* state = gui->anim_container<music_buttons_state>(id);
+
+    float btn = SCALE(24.f);
+    float gap = SCALE(16.f);
+    float side_btn = SCALE(20.f);
+
+    float center_y = total.Min.y + total.GetHeight() * 0.5f;
+    float main_btn_y = center_y - btn * 0.5f;
+    float side_y = center_y - side_btn * 0.5f; // Убрал лишнее смещение + SCALE(3.f), чтобы было ровно по центру
+
+    float group_w = btn * 3 + gap * 2;
+    float start = total.Min.x + (total.GetWidth() - group_w) * 0.5f;
+
+    ImRect prev_btn(
+        { start,                         main_btn_y },
+        { start + btn,                   main_btn_y + btn }
+    );
+    ImRect play_btn(
+        { start + btn + gap,             main_btn_y },
+        { start + btn * 2 + gap,         main_btn_y + btn }
+    );
+    ImRect next_btn(
+        { start + (btn + gap) * 2,       main_btn_y },
+        { start + (btn + gap) * 2 + btn, main_btn_y + btn }
+    );
+
+    ImRect repeat_btn(
+        { total.Min.x + SCALE(12.f),            side_y },
+        { total.Min.x + SCALE(12.f) + side_btn, side_y + side_btn }
+    );
+    ImRect volume_btn(
+        { total.Max.x - side_btn - SCALE(12.f), side_y },
+        { total.Max.x - SCALE(12.f),            side_y + side_btn }
+    );
+
+    // Исправление 2: Изменил -= на +=, чтобы скролл колесиком вверх прибавлял звук
+    if (ImGui::IsMouseHoveringRect(volume_btn.Min, volume_btn.Max, false))
+    {
+        if (ImGui::IsMouseClicked(ImGui::GetIO().MouseDown[0]))
+        {
+            state->volume = 0;
+        }
+        state->volume += g.IO.MouseWheel * 0.05f;
+        state->volume = ImClamp(state->volume, 0.f, 1.f);
+        ma_engine_set_volume(&var->music_player.manager.engine, state->volume);
+    }
+    
+
+    // volume icon
+
+    if (state->volume <= 0.f)
+        draw->text_clipped(window->DrawList, font->get(icons_data, 16), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "0", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+    else if (state->volume < 0.33f)
+        draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "1", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+    else if (state->volume < 0.66f)
+        draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "2", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+    else
+        draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "3", nullptr, nullptr, ImVec2(0.8f, 0.5f), nullptr);
+
+    if (ImGui::IsMouseHoveringRect(volume_btn.Min, volume_btn.Max, false))
+    {
+        ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+        if (g.IO.MouseClicked[0])
+        {
+            state->volume = 0;
+        }
+
+    }
+
+
+    gui->easing(state->repeat_alpha, state->loop ? 1.f : 0.4f, 6.f, static_easing);
+    gui->easing(state->play_alpha, var->music_player.current_song.repeat ? 0.6f : 1.f, 6.f, static_easing);
+
+
+        
+    if (ImGui::IsMouseHoveringRect(play_btn.Min, play_btn.Max, false))
+    {
+        if (g.IO.MouseClicked[0])
+        {
+            var->music_player.current_song.play = !var->music_player.current_song.play;
+            pause_song(var->music_player.manager);
+        }
+    }
+    if (var->music_player.current_song.play)
+    {
+        draw->text_clipped(window->DrawList, font->get(icons_data, 18), play_btn.Min, play_btn.Max, draw->get_clr(ImVec4(1, 1, 1, 1)), "g", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+    }
+    else
+    {
+        draw->text_clipped(window->DrawList, font->get(icons_data, 18), play_btn.Min, play_btn.Max, draw->get_clr(ImVec4(1, 1, 1, 1)), "E", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+    }
+
+    //prev
+
+    draw->text_clipped(window->DrawList, font->get(icons_data, 18), prev_btn.Min, prev_btn.Max, draw->get_clr(clr->main.text), "<", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+    if (ImGui::IsMouseHoveringRect(prev_btn.Min, prev_btn.Max, false))
+    {
+        if (g.IO.MouseClicked[0]) { /* логика prev */ }
+    }
+
+    //next
+
+    draw->text_clipped(window->DrawList, font->get(icons_data, 18), next_btn.Min, next_btn.Max, draw->get_clr(clr->main.text), ">", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+    if (ImGui::IsMouseHoveringRect(next_btn.Min, next_btn.Max, false))
+    {
+        if (g.IO.MouseClicked[0]) { /* логика next */ }
+    }
+
+    // repeat
+    if (var->music_player.current_song.repeat)
+    {
+        draw->text_clipped(window->DrawList, font->get(icons_data, 22), repeat_btn.Min, repeat_btn.Max, draw->get_clr(clr->main.text,state->repeat_alpha), "t", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+    }
+    else
+    {
+        draw->text_clipped(window->DrawList, font->get(icons_data, 22), repeat_btn.Min, repeat_btn.Max, draw->get_clr(clr->main.text,state->repeat_alpha), "r", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+
+    }
+
+    if (ImGui::IsMouseHoveringRect(repeat_btn.Min, repeat_btn.Max, false))
+    {
+        if (g.IO.MouseClicked[0])
+        {
+            state->loop = !state->loop;
+            var->music_player.current_song.repeat = state->loop;
+            set_loop(var->music_player.manager, state->loop);
+        }
+    }
+
+}
+
 void c_widgets::selection_buttons(std::string_view widgets_id, std::string_view name, std::string_view p1, std::string_view p2, int& variable)
 {
     struct reg_log_buttons_state
