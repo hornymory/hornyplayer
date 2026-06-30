@@ -108,18 +108,21 @@ bool c_widgets::settings_button()
         float alpha[3]{ 0.f, 0.24, 0.06f };
         bool clicked{ false };
     };
-
     ImGuiWindow* window = gui->get_window();
     if (window->SkipItems)
         return false;
-
     ImGuiContext& g = *GImGui;
     const ImGuiStyle& style = g.Style;
     const ImGuiID id = window->GetID("settings_button");
 
     const ImVec2 pos = window->DC.CursorPos;
-
-    const ImRect total(pos, pos + SCALE(elements->top_bar.height, elements->top_bar.height));
+    const ImRect total(
+        pos,
+        pos + ImVec2(
+            window->WorkRect.Max.x - pos.x,
+            SCALE(50.f) 
+        )
+    );
 
     gui->item_size(total, style.FramePadding.y);
     if (!gui->item_add(total, id))
@@ -127,6 +130,7 @@ bool c_widgets::settings_button()
 
     bool hovered = gui->item_hoverable(total, id, g.LastItemData.InFlags);
     bool pressed = hovered && g.IO.MouseClicked[0];
+
     driver_state* state = gui->anim_container<driver_state>(id);
 
     if (pressed)
@@ -140,12 +144,14 @@ bool c_widgets::settings_button()
     gui->easing(state->alpha[0], state->clicked ? 1.f : (hovered ? 0.1f : 0.f), 8.f, static_easing);
     gui->easing(state->alpha[1], state->clicked ? 1.f : (hovered ? 0.5f : 0.24f), 8.f, static_easing);
     gui->easing(state->alpha[2], state->clicked ? 0.48f : (hovered ? 0.2f : 0.06f), 8.f, static_easing);
-    window->DrawList->PushClipRect(total.Min, total.Max, true);
-    draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context, 0, elements->redirect.blur);
-    window->DrawList->PopClipRect();
-    draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(clr->main.text, 0.04), SCALE(elements->widgets.rounding));
+
+
+    draw->rect_filled(window->DrawList, total.Min, total.Max, clr->music_player.background, SCALE(elements->music_player.background_rounding));
+    draw->rect(window->DrawList, total.Min, total.Max, clr->music_player.background_stroke, SCALE(elements->music_player.background_rounding));
+
     draw->rect_filled(window->DrawList, total.Min, total.Max, draw->get_clr(clr->main.super, state->alpha[0]), SCALE(elements->widgets.rounding));
     draw->rect(window->DrawList, total.Min, total.Max, draw->get_clr(clr->main.super, state->alpha[2]), SCALE(elements->widgets.rounding), 0, SCALE(1));
+
     draw->text_clipped(window->DrawList, font->get(icons_data, 13), total.Min, total.Max, draw->get_clr(clr->main.text, state->alpha[1]), "J", NULL, NULL, ImVec2(0.5f, 0.5f));
 
     return state->clicked;
@@ -353,7 +359,7 @@ bool c_widgets::update_button()
     return state->clicked;
 }
 
-void c_widgets::music_buttons(std::string_view widgets_id)
+void c_widgets::music_buttons(std::string_view widgets_id,const ImVec2& pos,float width)
 {
     struct music_buttons_state
     {
@@ -366,22 +372,16 @@ void c_widgets::music_buttons(std::string_view widgets_id)
     };
 
     ImGuiWindow* window = gui->get_window();
-    if (window->SkipItems) return;
+    if (window->SkipItems)
+        return;
 
     ImGuiContext& g = *GImGui;
     const ImGuiID id = window->GetID(widgets_id.data());
 
-    const ImVec2 pos = window->DC.CursorPos;
-
-    float available_w = window->WorkRect.Max.x - pos.x - SCALE(20.f);
-
     const ImRect total(
         pos,
-        pos + ImVec2(available_w, SCALE(60.f))
+        pos + ImVec2(width, SCALE(60.f))
     );
-
-    gui->item_size(total, g.Style.FramePadding.y);
-    if (!gui->item_add(total, id)) return;
 
     music_buttons_state* state = gui->anim_container<music_buttons_state>(id);
 
@@ -448,10 +448,10 @@ void c_widgets::music_buttons(std::string_view widgets_id)
 
     // volume icon
 
-if (state->mute || state->volume <= 0.0f)
-{
-    draw->text_clipped(window->DrawList, font->get(icons_data, 16), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "H", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
-}
+    if (state->mute || state->volume <= 0.0f)
+    {
+        draw->text_clipped(window->DrawList, font->get(icons_data, 16), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "H", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+    }
     else
     {
         if (state->volume < 0.33f)
@@ -460,15 +460,6 @@ if (state->mute || state->volume <= 0.0f)
             draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "2", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
         else
             draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "3", nullptr, nullptr, ImVec2(0.8f, 0.5f), nullptr);
-    }
-    if (ImGui::IsMouseHoveringRect(volume_btn.Min, volume_btn.Max, false))
-    {
-        ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-        if (g.IO.MouseClicked[0])
-        {
-            state->volume = 0;
-        }
-
     }
 
 

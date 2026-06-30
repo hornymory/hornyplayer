@@ -51,9 +51,8 @@ public:
 
     void background_songs(std::string_view widgets_id);
     
-    void music_buttons(std::string_view widgets_id);
 
-
+    void music_buttons(std::string_view widgets_id, const ImVec2& pos, float width);
 
     
 

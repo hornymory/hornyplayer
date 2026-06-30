@@ -369,11 +369,10 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
     const ImVec2 pos = window->DC.CursorPos;
     
 
-    const ImRect total(pos, pos + ImVec2(window->WorkRect.Max.x - window->WorkRect.Min.x, window->WorkRect.Max.y - window->WorkRect.Min.y));
+    const ImRect total(pos, pos + ImVec2(window->WorkRect.Max.x - window->WorkRect.Min.x, window->WorkRect.Max.y - window->WorkRect.Min.y-70));
 
-    // � ��� ��������� ������� �������, �������, ���� �� �����, ������ ���������
 
-    float image_size = SCALE(320.f); // ������ ������ ���
+    float image_size = SCALE(320.f);
 
     float center_x = total.Min.x + total.GetSize().x / 2.f - image_size / 2.f;
     float top_y = total.Min.y + SCALE(40.f);
@@ -389,7 +388,6 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
         return false;
     song_card_state* state = gui->anim_container<song_card_state>(id);
 
-    // ���� ��������� ����� � ���������� �����
     if (state->last_song_name != song.name)
     {
         state->img_alpha = 0.f;
@@ -397,7 +395,16 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
     }
 
     gui->easing(state->img_alpha, song.texture ? 0.8f : 0.f, 6.f, static_easing);
+    float target = 0.f;
+    if (song.full_time > 0)
+        target = (song.current_time / song.full_time) * 100.f;
 
+    gui->easing(
+        state->shown,
+        target,
+        50.f,
+        static_easing
+    );
 
 
 
@@ -406,27 +413,36 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
 
 
     //// progress
-    //float bar_height = SCALE(4.f);
-    //float bar_y = img_zone.Max.y + SCALE(90.f);
+    float bar_height = SCALE(4.f);
+    float bar_y = img_zone.Max.y + SCALE(90.f);
 
-    //const ImRect bar_bg(
-    //    ImVec2(img_zone.Min.x, bar_y),
-    //    ImVec2(img_zone.Max.x, bar_y + bar_height)
-    //);
+    const ImRect bar_bg(
+        ImVec2(img_zone.Min.x, bar_y),
+        ImVec2(img_zone.Max.x, bar_y + bar_height)
+    );
+    float hit_height = SCALE(20.f);
 
-    //const float bar_w = ImMax(0.0f, bar_bg.Max.x - bar_bg.Min.x);
-    //const float fill_w = bar_w * (state->shown / 100.f);
-    //const ImRect bar_fill(bar_bg.Min, ImVec2(bar_bg.Min.x + fill_w, bar_bg.Max.y));
+    const ImRect bar_hit(
+        ImVec2(bar_bg.Min.x, bar_bg.GetCenter().y - hit_height * 0.5f),
+        ImVec2(bar_bg.Max.x, bar_bg.GetCenter().y + hit_height * 0.5f)
+    );
+    const float bar_w = ImMax(0.0f, bar_bg.Max.x - bar_bg.Min.x);
+
+    float progress = 0.f;
+
+    if (song.full_time > 0.f)
+        progress = song.current_time / song.full_time;
+
+    progress = ImClamp(progress, 0.f, 1.f);
 
 
+    const float fill_w = bar_w * (state->shown / 100.f);
+    const ImRect bar_fill(bar_bg.Min, ImVec2(bar_bg.Min.x + fill_w, bar_bg.Max.y));
 
 
 
     state->song_name_font = (font->is_russian_text(song.name) ? font->get(suisse_intl_medium_data, 24) : font->get(poppins_medium_data, 28));
     state->author_name_font = (font->is_russian_text(song.author) ? font->get(suisse_intl_medium_data, 16) : font->get(poppins_medium_data, 18));
-    //window->DrawList->PushClipRect(total.Min, total.Max, true);
-    //draw_background_blur(window->DrawList, var->winapi.device_dx11, var->winapi.device_context, SCALE(elements->widgets.rounding), 1);
-    //window->DrawList->PopClipRect();
 
     draw->rect(
         window->DrawList,
@@ -475,16 +491,62 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
         gui->text_end(song.author.c_str())
     );
 
-    float buttons_y = img_zone.Max.y + SCALE(80.f);
 
-    ImGui::SetCursorScreenPos(
-        ImVec2(
-            total.Min.x + SCALE(20.f),
-            buttons_y
-        )
+    const float pulse = (sinf((float)g.Time * 5.0) * 0.5f + 0.5f);
+    const float glow_alpha = 0.10 + pulse * 0.18f;
+
+    draw->rect_filled(window->DrawList, bar_bg.Min, bar_bg.Max, draw->get_clr(ImGui::ColorConvertU32ToFloat4(clr->music_player.background), 0.9f), SCALE(4.f));
+
+    if (fill_w > 1.0)
+    {
+        draw->rect_filled(window->DrawList, bar_fill.Min - SCALE(0.f, 4.f), bar_fill.Max + SCALE(0.f, 4.f), draw->get_clr(ImGui::ColorConvertU32ToFloat4(clr->music_player.background), glow_alpha * 0.55), SCALE(7.f));
+
+        draw->rect_filled(window->DrawList, bar_fill.Min - SCALE(0.f, 2.f), bar_fill.Max + SCALE(0.f, 2.f), draw->get_clr(ImGui::ColorConvertU32ToFloat4(clr->music_player.background),  glow_alpha), SCALE(6.f));
+    }
+
+    //draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(ImGui::ColorConvertU32ToFloat4(clr->music_player.background), 1.0f), SCALE(4.f));
+
+
+    draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(ImGui::ColorConvertU32ToFloat4(clr->main.text)), SCALE(4.f));
+
+
+  /*  bool bar_hovered = bar_bg.Contains(g.IO.MousePos);
+    bool bar_clicked = bar_hovered && g.IO.MouseClicked[0];*/
+    bool bar_hovered = bar_hit.Contains(g.IO.MousePos);
+    static bool dragging = false;
+    static float drag_percent = 0.f;
+
+    if (bar_hovered && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+    {
+        dragging = true;
+    }
+
+    if (dragging)
+    {
+        float click_x = g.IO.MousePos.x - bar_bg.Min.x;
+        drag_percent = ImClamp(click_x / bar_bg.GetWidth(), 0.f, 1.f);
+
+        // Для отображения полоски во время перетаскивания
+        song.current_time = song.full_time * drag_percent;
+
+        if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+        {
+            seek_song(var->music_player.manager, song, drag_percent);
+            dragging = false;
+        }
+    }
+
+
+
+    float buttons_y = img_zone.Max.y + SCALE(100.f);
+    ImVec2 btn_pos(
+        total.Min.x + SCALE(20.f),
+        buttons_y
     );
 
-    widgets->music_buttons("buttons");
+    widgets->music_buttons("buttons", btn_pos, total.GetWidth() - SCALE(40.f));
+
+
 
 
 // progress
@@ -492,35 +554,7 @@ bool c_widgets::player(std::string_view widgets_id, Song& song)
 
 
 
-    //const float pulse = (sinf((float)g.Time * 5.0) * 0.5f + 0.5f);
-    //const float glow_alpha = 0.10 + pulse * 0.18f;
 
-    //draw->rect_filled(window->DrawList, bar_bg.Min, bar_bg.Max, draw->get_clr(clr->main.text, 0.08f), SCALE(4.f));
-
-    //if (fill_w > 1.0)
-    //{
-    //    draw->rect_filled(window->DrawList, bar_fill.Min - SCALE(0.f, 4.f), bar_fill.Max + SCALE(0.f, 4.f), draw->get_clr(clr->main.accent, glow_alpha * 0.55), SCALE(7.f));
-
-    //    draw->rect_filled(window->DrawList, bar_fill.Min - SCALE(0.f, 2.f), bar_fill.Max + SCALE(0.f, 2.f), draw->get_clr(clr->main.accent, glow_alpha), SCALE(6.f));
-    //}
-
-    //draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(clr->music_player.border_color_rect, 1.0f), SCALE(4.f));
-
-
-    //draw->rect_filled(window->DrawList, bar_fill.Min, bar_fill.Max, draw->get_clr(clr->music_player.border_color_rect), SCALE(4.f));
-
-
-    //bool bar_hovered = bar_bg.Contains(g.IO.MousePos);
-    //bool bar_clicked = bar_hovered && g.IO.MouseClicked[0];
-
-    //if (bar_clicked)
-    //{
-    //    float click_x = g.IO.MousePos.x - bar_bg.Min.x;
-    //    float bar_width = bar_bg.Max.x - bar_bg.Min.x;
-    //    float click_percent = ImClamp(click_x / bar_width, 0.f, 1.f);
-
-    //    seek_song(var->music_player.manager, song, click_percent);     
-    //}
 
 
     return false;

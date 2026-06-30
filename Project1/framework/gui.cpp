@@ -80,6 +80,8 @@ void c_gui::render()
 				{
 					update_song_progress(var->music_player.manager, var->music_player.current_song);
 					widgets->player("music_player_panel", var->music_player.current_song);
+					widgets->settings_button();
+
 
 				}
 				gui->end_content();
