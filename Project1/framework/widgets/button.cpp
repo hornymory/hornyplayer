@@ -120,7 +120,7 @@ bool c_widgets::settings_button()
         pos,
         pos + ImVec2(
             window->WorkRect.Max.x - pos.x,
-            SCALE(50.f) 
+            SCALE(62.f) 
         )
     );
 
@@ -450,16 +450,16 @@ void c_widgets::music_buttons(std::string_view widgets_id,const ImVec2& pos,floa
 
     if (state->mute || state->volume <= 0.0f)
     {
-        draw->text_clipped(window->DrawList, font->get(icons_data, 16), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "H", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+        draw->text_clipped(window->DrawList, font->get(icons_data, 16), ImVec2(volume_btn.Min.x -SCALE(20.f),volume_btn.Min.y), ImVec2(volume_btn.Max.x + SCALE(20.f), volume_btn.Max.y), draw->get_clr(clr->main.text), "H", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
     }
     else
     {
         if (state->volume < 0.33f)
-            draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "1", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+            draw->text_clipped(window->DrawList, font->get(icons_data, 18), ImVec2(volume_btn.Min.x - SCALE(20.f), volume_btn.Min.y), ImVec2(volume_btn.Max.x + SCALE(20.f), volume_btn.Max.y) , draw->get_clr(clr->main.text), "1", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
         else if (state->volume < 0.66f)
-            draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "2", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
+            draw->text_clipped(window->DrawList, font->get(icons_data, 18), ImVec2(volume_btn.Min.x - SCALE(20.f), volume_btn.Min.y), ImVec2(volume_btn.Max.x + SCALE(20.f), volume_btn.Max.y) , draw->get_clr(clr->main.text), "2", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
         else
-            draw->text_clipped(window->DrawList, font->get(icons_data, 18), volume_btn.Min, volume_btn.Max, draw->get_clr(clr->main.text), "3", nullptr, nullptr, ImVec2(0.8f, 0.5f), nullptr);
+            draw->text_clipped(window->DrawList, font->get(icons_data, 18), ImVec2(volume_btn.Min.x - SCALE(20.f), volume_btn.Min.y),  ImVec2(volume_btn.Max.x + SCALE(20.f),volume_btn.Max.y), draw->get_clr(clr->main.text), "3", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
     }
 
 
@@ -490,7 +490,28 @@ void c_widgets::music_buttons(std::string_view widgets_id,const ImVec2& pos,floa
     draw->text_clipped(window->DrawList, font->get(icons_data, 18), prev_btn.Min, prev_btn.Max, draw->get_clr(clr->main.text), "<", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
     if (ImGui::IsMouseHoveringRect(prev_btn.Min, prev_btn.Max, false))
     {
-        if (g.IO.MouseClicked[0]) { /* логика prev */ }
+        if (g.IO.MouseClicked[0])
+        {
+            auto& songs = var->music_player.manager.songs;
+            for (int i = 0; i < (int)songs.size(); i++)
+            {
+                if (songs[i].name == var->music_player.current_song.name)
+                {
+                    int prev = (i - 1 + (int)songs.size()) % (int)songs.size();
+                    for (auto& s : songs) s.play = false;
+                    songs[prev].play = true;
+                    var->music_player.current_song = songs[prev];
+                    var->music_player.current_song.play = true;
+                    play_song(var->music_player.manager, songs[prev]);
+                    var->music_player.current_song.full_time = songs[prev].full_time;
+                    var->music_player.manager.play_guard_frames = 30;
+
+                    break;
+                }
+
+            }
+
+        }
     }
 
     //next
@@ -498,7 +519,25 @@ void c_widgets::music_buttons(std::string_view widgets_id,const ImVec2& pos,floa
     draw->text_clipped(window->DrawList, font->get(icons_data, 18), next_btn.Min, next_btn.Max, draw->get_clr(clr->main.text), ">", nullptr, nullptr, ImVec2(0.5f, 0.5f), nullptr);
     if (ImGui::IsMouseHoveringRect(next_btn.Min, next_btn.Max, false))
     {
-        if (g.IO.MouseClicked[0]) { /* логика next */ }
+        if (g.IO.MouseClicked[0])
+        {
+            auto& songs = var->music_player.manager.songs;
+            for (int i = 0; i < (int)songs.size(); i++)
+            {
+                if (songs[i].name == var->music_player.current_song.name)
+                {
+                    int next = (i + 1) % (int)songs.size();
+                    for (auto& s : songs) s.play = false;
+                    songs[next].play = true;
+                    var->music_player.current_song = songs[next];
+                    var->music_player.current_song.play = true;
+                    play_song(var->music_player.manager, songs[next]);
+                    var->music_player.current_song.full_time = songs[next].full_time;
+                    var->music_player.manager.play_guard_frames = 30;
+                    break;
+                }
+            }
+        }
     }
 
     // repeat

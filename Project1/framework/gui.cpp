@@ -80,6 +80,9 @@ void c_gui::render()
 				{
 					update_song_progress(var->music_player.manager, var->music_player.current_song);
 					widgets->player("music_player_panel", var->music_player.current_song);
+					ImVec2 cur = ImGui::GetCursorScreenPos();
+					ImGui::SetCursorScreenPos(ImVec2(cur.x, cur.y - SCALE(elements->window.padding.y) + SCALE(8.f)));
+
 					widgets->settings_button();
 
 

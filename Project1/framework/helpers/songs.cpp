@@ -217,13 +217,50 @@ void update_song_progress(SongsManager& manager, Song& song)
     if (!manager.sound_loaded)
         return;
 
+    if (manager.play_guard_frames > 0)
+    {
+        manager.play_guard_frames--;
+        return;
+    }
+
+    bool is_playing = ma_sound_is_playing(&manager.current_sound);
+
+    if (is_playing)
+        manager.was_playing = true;
+
+    if (!is_playing && manager.was_playing)
+    {
+        if (manager.paused)
+            return;
+        manager.was_playing = false;
+
+        if (!song.repeat)
+        {
+            auto& songs = manager.songs;
+            for (int i = 0; i < (int)songs.size(); i++)
+            {
+                if (songs[i].name == song.name)
+                {
+                    int next = (i + 1) % (int)songs.size();
+                    for (auto& s : songs) s.play = false;
+                    songs[next].play = true;
+                    var->music_player.current_song = songs[next];
+                    var->music_player.current_song.play = true;
+                    play_song(manager, songs[next]);
+                    var->music_player.current_song.full_time = songs[next].full_time;
+                    manager.play_guard_frames = 30;
+                    return;
+                }
+            }
+        }
+    }
+
     ma_uint64 cursor_frames = 0;
     ma_sound_get_cursor_in_pcm_frames(&manager.current_sound, &cursor_frames);
     ma_uint32 sample_rate = ma_engine_get_sample_rate(&manager.engine);
-
     song.current_time = (float)cursor_frames / sample_rate;
+    var->music_player.current_song.current_time = song.current_time;
 }
-
 void seek_song(SongsManager& manager, Song& song, float percent)
 {
     if (!manager.sound_loaded)
@@ -242,11 +279,17 @@ void pause_song(SongsManager& manager)
 {
     if (!manager.sound_loaded)
         return;
-    
+
     if (ma_sound_is_playing(&manager.current_sound))
+    {
         ma_sound_stop(&manager.current_sound);
+        manager.paused = true;
+    }
     else
+    {
         ma_sound_start(&manager.current_sound);
+        manager.paused = false;
+    }
 }
 void set_volume(SongsManager& manager, float volume)
 {

@@ -33,7 +33,9 @@ struct SongsManager
 	bool engine_initialized{ false };
 	bool sound_loaded{ false };
 	float volume{ 0.5f };
-
+	int play_guard_frames{ 0 };
+	bool was_playing{ false };
+	bool paused{ false };
 };
 
 void load_songs(SongsManager& manager);
